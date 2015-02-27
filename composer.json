@@ -1,0 +1,24 @@
+{
+    "name": "akkaweb/AkkaFacebook",
+    "description": "CakePHP 3 Facebook Plugin",
+    "type": "cakephp-plugin",
+    "require": {
+        "php": ">=5.4",
+        "cakephp/cakephp": "3.0.x-dev",
+        "facebook/php-sdk-v4" : "4.0.*",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AkkaFacebook\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AkkaFacebook\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
