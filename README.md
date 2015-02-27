@@ -18,10 +18,10 @@ This plugin is currently in development and should be tested before use.
 ## Installation
 
 ### Git Close (plugins/AkkaFacebook)
-git clone git@github.com:akkaweb/AKKA-CakePHP-Facebook-Plugin.git
+`git clone git@github.com:akkaweb/AKKA-CakePHP-Facebook-Plugin.git`
 
 ### Download
-https://github.com/akkaweb/AKKA-CakePHP-Facebook-Plugin/archive/master.zip
+`https://github.com/akkaweb/AKKA-CakePHP-Facebook-Plugin/archive/master.zip`
 
 ### Composer
 
