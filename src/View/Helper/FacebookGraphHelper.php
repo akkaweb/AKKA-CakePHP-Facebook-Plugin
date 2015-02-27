@@ -57,8 +57,9 @@ class FacebookGraphHelper extends Helper {
 	$class = (isset($options['class']) ? $options['class'] : 'FB-login-button');
 	$title = (isset($options['title']) ? $options['title'] : 'Login with Facebook');
 	$style = (isset($options['style']) ? $options['style'] : '');
+        $label = (isset($options['label']) ? $options['label'] : 'Facebook Login');
 	
-	return '<a id="' . $id . '" class="' . $class . '" href="' . Configure::read('fb_login_url') . '" title="' . $title . '" style="' . $style . '">Facebook Login</a>';
+	return '<a id="' . $id . '" class="' . $class . '" href="' . Configure::read('fb_login_url') . '" title="' . $title . '" style="' . $style . '">'.$label.'</a>';
     }
     
     /**
