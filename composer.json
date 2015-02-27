@@ -1,5 +1,5 @@
 {
-    "name": "akkaweb/AkkaFacebook",
+    "name": "akkaweb/cakephp-facebook",
     "description": "CakePHP 3 Facebook Plugin",
     "type": "cakephp-plugin",
     "require": {
