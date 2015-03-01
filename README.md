@@ -78,11 +78,11 @@ Note: GraphHelper is automatically loaded by the composer. If that is not desire
 
 #### Helper Template File Setup
 
-- Add `<?php echo $this->FacebookGraph->initJsSDK(); ?>` immediately after the opening `<body>` tag
+- Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
 #### Login Button
 
-`<?php echo $this->FacebookGraph->loginLink(); ?>`
+`<?php echo $this->Facebook->loginLink(); ?>`
 
 
 
