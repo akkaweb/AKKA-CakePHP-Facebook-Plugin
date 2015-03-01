@@ -2,7 +2,9 @@
 
 A CakePHP 3.x Plugin to allow Facebook Login into an application.
 
-THIS DOCUMENT IS IN DEVELOPMENT
+[![Latest Stable Version](https://poser.pugx.org/akkaweb/cakephp-facebook/version.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook) 
+[![Total Downloads](https://poser.pugx.org/akkaweb/cakephp-facebook/downloads.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
+[![License](https://poser.pugx.org/akkaweb/cakephp-facebook/license.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
 
 ## Requirements
 - CakePHP 3.x with Auth component enabled
