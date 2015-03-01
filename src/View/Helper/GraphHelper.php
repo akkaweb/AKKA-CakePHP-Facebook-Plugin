@@ -18,7 +18,7 @@ use Facebook\GraphSessionInfo;
 /**
  * Graph helper
  */
-class FacebookGraphHelper extends Helper {
+class GraphHelper extends Helper {
 
     public $helpers = ['Html'];
     public $appId = null;

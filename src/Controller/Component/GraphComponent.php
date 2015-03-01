@@ -192,7 +192,7 @@ class GraphComponent extends Component {
          */
         if ($this->_configs['enable_graph_helper']) {
             $this->Controller->helpers = [
-		'AkkaFacebook.FacebookGraph' => [
+		'AkkaFacebook.Graph' => [
 		    'redirect_url' => $this->_configs['redirect_url'], 
 		    'app_id' => $this->_configs['app_id'], 
 		    'app_scope' => $this->_configs['app_scope']
