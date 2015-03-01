@@ -191,7 +191,13 @@ class GraphComponent extends Component {
          * Attach Facebook Graph Helper
          */
         if ($this->_configs['enable_graph_helper']) {
-            $this->Controller->helpers['AkkaFacebook.FacebookGraph'] = ['redirect_url' => $this->_configs['redirect_url'], 'app_id' => $this->_configs['app_id'], 'app_scope' => $this->_configs['app_scope']];
+            $this->Controller->helpers = [
+		'AkkaFacebook.FacebookGraph' => [
+		    'redirect_url' => $this->_configs['redirect_url'], 
+		    'app_id' => $this->_configs['app_id'], 
+		    'app_scope' => $this->_configs['app_scope']
+		]
+	    ];
         }
 
         /**
@@ -250,7 +256,7 @@ class GraphComponent extends Component {
      * 
      * @param \Cake\Event\Event $event
      */
-    public function startup(Event $event) {
+    public function startup(Event $event) {	
         /**
          * Checks if user is trying to authenticate by watching for what Facebook returns
          */
@@ -263,7 +269,10 @@ class GraphComponent extends Component {
             /**
              * Authenticates existing user into application
              */
+	    
+		
             if ($queryFacebookId) {
+		
                 $existing_user = $queryFacebookId->toArray();
                 if ($this->Auth->user() && $this->Auth->user('facebook_id') != $existing_user['facebook_id']) {
                     $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
