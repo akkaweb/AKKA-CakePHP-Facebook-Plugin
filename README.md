@@ -72,10 +72,10 @@ public function initialize(){
 	'post_login_redirect' => '' //ie. Router::url(['controller' => 'Users', 'action' => 'account'], TRUE)
 	'user_columns' => ['first_name' => 'fname', 'last_name' => 'lname', 'username' => 'uname', 'password' => 'pass'] //not required
     ]);
-
-`user_columns` defaults to keys. If you User table columns keys are those, you do not need to add this option.
 }
 ```
+
+`user_columns` defaults to keys. If you User table columns keys are those, you do not need to add this option.
 
 ## Usage
 
