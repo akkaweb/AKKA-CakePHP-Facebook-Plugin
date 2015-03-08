@@ -12,12 +12,12 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
 - Facebook PHP SDK 4.0
 - User Table with at least the following columns
     * `facebook_id varchar(20)`
-    * `first_name`
-    * `last_name`
+    * `first_name` //can be dynamically set
+    * `last_name` //can be dynamically set
     * `username`
     * `password`
 
-Except `facebook_id` and `password`, work is underway to make the other fields not required and dynamic
+For existing applications tha already have a first_name, last_name, username and password already created with a different column name, you can dynamically set it in options. See section 2 of Configuration below
 
 NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Facebook for you if not already installed. If manual download is chosen, you must download the Facebook Source into `vendor/facebook/php-sdk-v4`
 
@@ -70,13 +70,16 @@ public function initialize(){
 	'app_scope' => '', //ie. email
 	'redirect_url' => '', //ie. Router::url(['controller' => 'Users', 'action' => 'login'], TRUE),
 	'post_login_redirect' => '' //ie. Router::url(['controller' => 'Users', 'action' => 'account'], TRUE)
+	'user_columns' => ['first_name' => 'fname', 'last_name' => 'lname', 'username' => 'uname', 'password' => 'pass'] //not required
     ]);
+
+`user_columns` defaults to keys. If you User table columns keys are those, you do not need to add this option.
 }
 ```
 
 ## Usage
 
-Note: GraphHelper is automatically loaded by the composer. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
+Note: FacebookHelper is automatically loaded by the composer. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
 
 #### Helper Template File Setup
 
