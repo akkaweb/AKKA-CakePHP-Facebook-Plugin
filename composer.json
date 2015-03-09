@@ -5,27 +5,30 @@
     "license": "MIT",
     "authors": [
 	{
-	    "name" : "Andre Santiago",
+	    "name": "Andre Santiago",
 	    "email": "admin@akkaweb.com"
 	}
     ],
     "require": {
-        "php": ">=5.4",
-        "cakephp/cakephp": "3.0.x-dev",
-        "facebook/php-sdk-v4": "4.0.*"
+	"php": ">=5.4",
+	"cakephp/cakephp": "3.0.x-dev",
+	"facebook/php-sdk-v4": "4.0.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+	"phpunit/phpunit": "*"
     },
     "autoload": {
-        "psr-4": {
-            "AkkaFacebook\\": "src"
-        }
+	"psr-4": {
+	    "AkkaFacebook\\": "src"
+	}
     },
     "autoload-dev": {
-        "psr-4": {
-            "AkkaFacebook\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
-        }
+	"psr-4": {
+	    "AkkaFacebook\\Test\\": "tests",
+	    "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+	}
+    },
+    "extra": {
+	"installer-name": "AkkaFacebook"
     }
 }
