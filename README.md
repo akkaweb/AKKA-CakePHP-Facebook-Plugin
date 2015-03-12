@@ -1,4 +1,4 @@
-#### NOTE: Plugin is currently unstable. Please stand by until a new updated version is uploaded.
+#### NOTE: Plugin is currently unstable as it is not playing nicely with the Facebook SDK in every environment. Please stand by until the problem is resolved and a new updated version is uploaded.
 
 # CakePHP 3 Facebook Plugin
 
