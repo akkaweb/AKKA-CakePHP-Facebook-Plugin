@@ -17,7 +17,7 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
     * `username` // can be set in config
     * `password` // can be set in config
 
-For existing applications tha already have a `first_name`, `last_name`, `username` and `password` already created with a different column name, you can dynamically set it in configuration options when loading the `Component` to your `AppController.php` file. See section 2 of Configuration below
+For existing applications that already have a `first_name`, `last_name`, `username` and `password` already created with a different column name, you can dynamically set it in configuration options when loading the `Component` to your `AppController.php` file. See section 2 of Configuration below
 
 NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Facebook for you if not already installed. If manual download is chosen, you must download the Facebook Source into `vendor/facebook/php-sdk-v4` and make sure it can be loaded by the composer. Else you need to manually include FAcebook's `autoload.php` file in your application's `bootstrap.php`.
 
