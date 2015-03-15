@@ -110,6 +110,16 @@ Default Options
 	
 `<?php echo $this->Facebook->loginButton($options = []); ?>`
 
+#### Like Button (Facebook Like)
+Default Options
+	- 'action' => 'like', // like, recommend
+	- 'share' => true,
+	- 'width' => 450,
+	- 'show-faces' => true,
+	- 'layout' => 'standard' // standard, box_count, button_count, button
+	
+`<?php echo $this->Facebook->likeButton($options = []); ?>`
+
 #### Share Button (Facebook Share)
 Default Options
 	- 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
@@ -135,7 +145,21 @@ Default Options
 	
 `<?php echo $this->Facebook->followButton($options = []); ?>`
 
-THIS IS THE BASIC TO HAVE THIS PLUGIN ALLOW YOUR APPLICATION TO ACCEPT FACEBOOK LOGIN/REGISTRATION. MORE HELPER DOCUMENTATION WILL BE COMING SOON.
+#### Comments (Facebook Comments)
+Default Options
+	- 'colorscheme' => light, // light/dark
+	- 'mobile' => 'Auto-detected',
+	- 'num-posts' => 10,
+	- 'order-by' => 'social', // social/reverse_time/time
+	- 'width' => 550
+	
+`<?php echo $this->Facebook->comments($options = []); ?>`
+
+#### Embedded Posts (Facebook Embedded Posts)
+Default Options
+	- 'width' => 500
+	
+`<?php echo $this->Facebook->embeddedPosts($options = []); ?>`
 
 
 ## Disclaimer
