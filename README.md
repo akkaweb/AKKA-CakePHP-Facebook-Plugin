@@ -62,7 +62,7 @@ Plugin::load('AkkaFacebook', ['bootstrap' => false, 'routes' => true]);
 
 2. Load the plugin's component in `AppController.php` 
 
-Note: You need to obtain your facebook `App Id` and `App Secret` from `http://developers.facebook.com`. Once you are on that page and have an App created, you can retrieve your `App Id` and `App Secret`. Make sure you add your domain to `App Domains` in the `Settings` page.
+Note: You need to obtain your facebook `App Id` and `App Secret` from http://developers.facebook.com. Once you are on that page and have an App created, you can retrieve your `App Id` and `App Secret`. Make sure you add your domain to `App Domains` in the `Settings` page.
 
 `user_columns` is optional and should only be used if your `Users` database columns defer from the defaults as specified in the Requirement section, above.
 
