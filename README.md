@@ -89,11 +89,51 @@ Note: FacebookHelper is automatically loaded by the `Graph Component`. If that i
 
 - Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
-#### Login Button
+#### Login Link (Customizable Facebook link <a href)
+Optional Settings Array
+	- id 	-> Link id
+	- class -> Link class
+	- title -> Link title
+	- style -> Any html style
+	- label -> Hyperlink text
+	
+`<?php echo $this->Facebook->loginLink($options = []); ?>`
 
-`<?php echo $this->Facebook->loginLink(); ?>`
+#### Login Button (Facebook Button)
+Default Options
+	- 'auto-logout-link' => false,
+	- 'max-rows' => 1,
+	- 'onlogin' => null,
+	- 'size' => 'small',
+	- 'show-faces' => false,
+	- 'default-audience' => 'friends'
+	
+`<?php echo $this->Facebook->loginButton($options = []); ?>`
 
+#### Share Button (Facebook Share)
+Default Options
+	- 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
+	
+`<?php echo $this->Facebook->shareButton($options = []); ?>`
 
+#### Send Button (Facebook Send)
+Default Options
+	- 'width' => 50,
+	- 'height' => 30,
+	- 'colorscheme' => dark
+	
+`<?php echo $this->Facebook->sendButton($options = []); ?>`
+
+#### Follow Button (Facebook Follow)
+Default Options
+	- 'width' => 300,
+	- 'height' => 100,
+	- 'colorscheme' => 'light',
+	- 'layout' => 'standard',
+	- 'show-faces' => false,
+	- 'kid-directed-site' => false
+	
+`<?php echo $this->Facebook->followButton($options = []); ?>`
 
 THIS IS THE BASIC TO HAVE THIS PLUGIN ALLOW YOUR APPLICATION TO ACCEPT FACEBOOK LOGIN/REGISTRATION. MORE HELPER DOCUMENTATION WILL BE COMING SOON.
 
