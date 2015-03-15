@@ -90,6 +90,7 @@ Note: FacebookHelper is automatically loaded by the `Graph Component`. If that i
 - Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
 ##### Login Link (Customizable Facebook link <a href)
+````
 Optional Settings Array
 * id 	-> Link id
 * class -> Link class
@@ -98,6 +99,7 @@ Optional Settings Array
 * label -> Hyperlink text
 	
 `<?php echo $this->Facebook->loginLink($options = []); ?>`
+````
 
 ##### Login Button (Facebook Button)
 ````
@@ -108,9 +110,9 @@ Default Options
 * 'size' => 'small',
 * 'show-faces' => false,
 * 'default-audience' => 'friends'
-````
 
 `<?php echo $this->Facebook->loginButton($options = []); ?>`
+````
 
 ##### Like Button (Facebook Like)
 ````
@@ -120,17 +122,17 @@ Default Options
 * 'width' => 450,
 * 'show-faces' => true,
 * 'layout' => 'standard' // standard, box_count, button_count, button
-````	
 
 `<?php echo $this->Facebook->likeButton($options = []); ?>`
+````
 
 ##### Share Button (Facebook Share)
 ````
 Default Options
 * 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
-````
 
 `<?php echo $this->Facebook->shareButton($options = []); ?>`
+````
 
 ##### Send Button (Facebook Send)
 ````
@@ -138,9 +140,9 @@ Default Options
 * 'width' => 50,
 * 'height' => 30,
 * 'colorscheme' => dark
-````
 	
 `<?php echo $this->Facebook->sendButton($options = []); ?>`
+````
 
 ##### Follow Button (Facebook Follow)
 ````
@@ -151,9 +153,9 @@ Default Options
 * 'layout' => 'standard',
 * 'show-faces' => false,
 * 'kid-directed-site' => false
-````
 	
 `<?php echo $this->Facebook->followButton($options = []); ?>`
+````
 
 ##### Comments (Facebook Comments)
 ````
@@ -163,18 +165,17 @@ Default Options
 * 'num-posts' => 10,
 * 'order-by' => 'social', // social/reverse_time/time
 * 'width' => 550
-````
 	
 `<?php echo $this->Facebook->comments($options = []); ?>`
+````
 
 ##### Embedded Posts (Facebook Embedded Posts)
 ````
 Default Options
 * 'width' => 500
-````
 	
 `<?php echo $this->Facebook->embeddedPosts($options = []); ?>`
-
+````
 
 ## Disclaimer
 Although we have done many tests to ensure this plugin works as intended, we advise you to use it at your own risk. As with anything else, you should first test any addition to your application in a test environment. Please provide any fixes or enhancements via issue or pull request.
