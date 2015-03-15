@@ -91,11 +91,11 @@ Note: FacebookHelper is automatically loaded by the `Graph Component`. If that i
 
 ##### Login Link (Customizable Facebook link <a href)
 Optional Settings Array
-	- id 	-> Link id
-	- class -> Link class
-	- title -> Link title
-	- style -> Any html style
-	- label -> Hyperlink text
+	* - id 	-> Link id
+	* - class -> Link class
+	* - title -> Link title
+	* - style -> Any html style
+	* - label -> Hyperlink text
 	
 `<?php echo $this->Facebook->loginLink($options = []); ?>`
 
