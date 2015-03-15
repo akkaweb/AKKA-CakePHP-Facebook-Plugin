@@ -101,23 +101,24 @@ Optional Settings Array
 
 ##### Login Button (Facebook Button)
 Default Options
-	- 'auto-logout-link' => false,
-	- 'max-rows' => 1,
-	- 'onlogin' => null,
-	- 'size' => 'small',
-	- 'show-faces' => false,
-	- 'default-audience' => 'friends'
+* 'auto-logout-link' => false,
+* 'max-rows' => 1,
+* 'onlogin' => null,
+* 'size' => 'small',
+* 'show-faces' => false,
+* 'default-audience' => 'friends'
 	
 `<?php echo $this->Facebook->loginButton($options = []); ?>`
 
 ##### Like Button (Facebook Like)
+````
 Default Options
-	- 'action' => 'like', // like, recommend
-	- 'share' => true,
-	- 'width' => 450,
-	- 'show-faces' => true,
-	- 'layout' => 'standard' // standard, box_count, button_count, button
-	
+* 'action' => 'like', // like, recommend
+* 'share' => true,
+* 'width' => 450,
+* 'show-faces' => true,
+* 'layout' => 'standard' // standard, box_count, button_count, button
+````	
 `<?php echo $this->Facebook->likeButton($options = []); ?>`
 
 ##### Share Button (Facebook Share)
