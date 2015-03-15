@@ -26,7 +26,7 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 
 ## Installation
 
-#### Composer (Best Choice)
+##### Composer (Best Choice)
 
 1. Add the following to your `composer.json` located in the root of your application, in the `require` section . ie. `/var/www/domain.com/composer.json`
 
@@ -43,10 +43,10 @@ sudo php composer.phar update
 ```
 Note: if `composer.phar` is not found, you need to install it. Follow CakePHP's documentation here -> http://book.cakephp.org/3.0/en/installation.html. Refer to Installing Cakephp section
 
-#### Git Clone (plugins/AkkaFacebook)
+##### Git Clone (plugins/AkkaFacebook)
 `git clone git@github.com:akkaweb/AKKA-CakePHP-Facebook-Plugin.git`
 
-#### Download
+##### Download
 `https://github.com/akkaweb/AKKA-CakePHP-Facebook-Plugin/archive/master.zip`
 
 Note: When installing with either manual download or Git Clone and CakePHP complains it cannot find the plugin, you need to add the plugin to `vendor/cakephp-plugins.php` in the `plugins` array [] --> `'AkkaFacebook' => $baseDir . '/plugins/AkkaFacebook/'`. If you are using composer, running `php composer.phar dumpautoload` could be sufficient. If it does not work add the following to the `"autoload"` section in the root application's `composer.json` file in the `"psr-4":` section: `"AkkaFacebook\\": "./plugins/AkkaFacebook/src"`
@@ -85,11 +85,11 @@ public function initialize(){
 
 Note: FacebookHelper is automatically loaded by the `Graph Component`. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
 
-#### Helper Template File Setup
+##### Helper Template File Setup
 
 - Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
-#### Login Link (Customizable Facebook link <a href)
+##### Login Link (Customizable Facebook link <a href)
 Optional Settings Array
 	- id 	-> Link id
 	- class -> Link class
@@ -99,7 +99,7 @@ Optional Settings Array
 	
 `<?php echo $this->Facebook->loginLink($options = []); ?>`
 
-#### Login Button (Facebook Button)
+##### Login Button (Facebook Button)
 Default Options
 	- 'auto-logout-link' => false,
 	- 'max-rows' => 1,
@@ -110,7 +110,7 @@ Default Options
 	
 `<?php echo $this->Facebook->loginButton($options = []); ?>`
 
-#### Like Button (Facebook Like)
+##### Like Button (Facebook Like)
 Default Options
 	- 'action' => 'like', // like, recommend
 	- 'share' => true,
@@ -120,13 +120,13 @@ Default Options
 	
 `<?php echo $this->Facebook->likeButton($options = []); ?>`
 
-#### Share Button (Facebook Share)
+##### Share Button (Facebook Share)
 Default Options
 	- 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
 	
 `<?php echo $this->Facebook->shareButton($options = []); ?>`
 
-#### Send Button (Facebook Send)
+##### Send Button (Facebook Send)
 Default Options
 	- 'width' => 50,
 	- 'height' => 30,
@@ -134,7 +134,7 @@ Default Options
 	
 `<?php echo $this->Facebook->sendButton($options = []); ?>`
 
-#### Follow Button (Facebook Follow)
+##### Follow Button (Facebook Follow)
 Default Options
 	- 'width' => 300,
 	- 'height' => 100,
@@ -145,7 +145,7 @@ Default Options
 	
 `<?php echo $this->Facebook->followButton($options = []); ?>`
 
-#### Comments (Facebook Comments)
+##### Comments (Facebook Comments)
 Default Options
 	- 'colorscheme' => light, // light/dark
 	- 'mobile' => 'Auto-detected',
@@ -155,7 +155,7 @@ Default Options
 	
 `<?php echo $this->Facebook->comments($options = []); ?>`
 
-#### Embedded Posts (Facebook Embedded Posts)
+##### Embedded Posts (Facebook Embedded Posts)
 Default Options
 	- 'width' => 500
 	
