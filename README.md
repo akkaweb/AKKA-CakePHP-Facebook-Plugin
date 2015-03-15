@@ -71,12 +71,12 @@ public function initialize(){
     parent::initialize();
     
     $this->loadComponent('AkkaFacebook.Graph', [
-	'app_id' => 'your-fb-app-id',
-	'app_secret' => 'your-fb-app-secret',
-	'app_scope' => '', //ie. email
-	'redirect_url' => '', //ie. Router::url(['controller' => 'Users', 'action' => 'login'], TRUE),
-	'post_login_redirect' => '' //ie. Router::url(['controller' => 'Users', 'action' => 'account'], TRUE)
-	// 'user_columns' => ['first_name' => 'fname', 'last_name' => 'lname', 'username' => 'uname', 'password' => 'pass'] //not required
+	    'app_id' => 'your-fb-app-id',
+	    'app_secret' => 'your-fb-app-secret',
+	    'app_scope' => '', //ie. email
+	    'redirect_url' => '', //ie. Router::url(['controller' => 'Users', 'action' => 'login'], TRUE),
+	    'post_login_redirect' => '' //ie. Router::url(['controller' => 'Users', 'action' => 'account'], TRUE)
+	    // 'user_columns' => ['first_name' => 'fname', 'last_name' => 'lname', 'username' => 'uname', 'password' => 'pass'] //not required
     ]);
 }
 ```
