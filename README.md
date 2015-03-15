@@ -5,7 +5,7 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
 [![Total Downloads](https://poser.pugx.org/akkaweb/cakephp-facebook/downloads.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
 [![License](https://poser.pugx.org/akkaweb/cakephp-facebook/license.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
 
-## Requirements
+## Requirements #######################################################
 - CakePHP 3.x with Auth component correctly setup. Refer to http://book.cakephp.org/3.0/en/controllers/components/authentication.html for setup
 - PHP 5.4.6+
 - Facebook PHP SDK 4.0+
@@ -20,11 +20,11 @@ For existing applications that already have a `first_name`, `last_name`, `userna
 
 NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Facebook for you if not already installed. If manual download is chosen, you must download the Facebook Source into `vendor/facebook/php-sdk-v4` and make sure it can be loaded by the composer. Else you need to manually include FAcebook's `autoload.php` file in your application's `bootstrap.php`.
 
-## Included
+## Included #######################################################
 - Facebook Graph Component
 - Facebook Graph Helper
 
-## Installation
+## Installation #######################################################
 
 ##### Composer (Best Choice)
 
@@ -52,7 +52,7 @@ Note: if `composer.phar` is not found, you need to install it. Follow CakePHP's 
 Note: When installing with either manual download or Git Clone and CakePHP complains it cannot find the plugin, you need to add the plugin to `vendor/cakephp-plugins.php` in the `plugins` array [] --> `'AkkaFacebook' => $baseDir . '/plugins/AkkaFacebook/'`. If you are using composer, running `php composer.phar dumpautoload` could be sufficient. If it does not work add the following to the `"autoload"` section in the root application's `composer.json` file in the `"psr-4":` section: `"AkkaFacebook\\": "./plugins/AkkaFacebook/src"`
 
 
-## Configuration
+## Configuration #######################################################
 
 1. Load the plugin in your application's `bootstrap.php` file:
 
@@ -81,7 +81,7 @@ public function initialize(){
 }
 ```
 
-## Usage
+## Usage #######################################################
 
 Note: FacebookHelper is automatically loaded by the `Graph Component`. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
 
@@ -100,6 +100,7 @@ Optional Settings Array
 `<?php echo $this->Facebook->loginLink($options = []); ?>`
 
 ##### Login Button (Facebook Button)
+````
 Default Options
 * 'auto-logout-link' => false,
 * 'max-rows' => 1,
@@ -107,7 +108,8 @@ Default Options
 * 'size' => 'small',
 * 'show-faces' => false,
 * 'default-audience' => 'friends'
-	
+````
+
 `<?php echo $this->Facebook->loginButton($options = []); ?>`
 
 ##### Like Button (Facebook Like)
@@ -119,46 +121,57 @@ Default Options
 * 'show-faces' => true,
 * 'layout' => 'standard' // standard, box_count, button_count, button
 ````	
+
 `<?php echo $this->Facebook->likeButton($options = []); ?>`
 
 ##### Share Button (Facebook Share)
+````
 Default Options
-	- 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
-	
+* 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
+````
+
 `<?php echo $this->Facebook->shareButton($options = []); ?>`
 
 ##### Send Button (Facebook Send)
+````
 Default Options
-	- 'width' => 50,
-	- 'height' => 30,
-	- 'colorscheme' => dark
+* 'width' => 50,
+* 'height' => 30,
+* 'colorscheme' => dark
+````
 	
 `<?php echo $this->Facebook->sendButton($options = []); ?>`
 
 ##### Follow Button (Facebook Follow)
+````
 Default Options
-	- 'width' => 300,
-	- 'height' => 100,
-	- 'colorscheme' => 'light',
-	- 'layout' => 'standard',
-	- 'show-faces' => false,
-	- 'kid-directed-site' => false
+* 'width' => 300,
+* 'height' => 100,
+* 'colorscheme' => 'light',
+* 'layout' => 'standard',
+* 'show-faces' => false,
+* 'kid-directed-site' => false
+````
 	
 `<?php echo $this->Facebook->followButton($options = []); ?>`
 
 ##### Comments (Facebook Comments)
+````
 Default Options
-	- 'colorscheme' => light, // light/dark
-	- 'mobile' => 'Auto-detected',
-	- 'num-posts' => 10,
-	- 'order-by' => 'social', // social/reverse_time/time
-	- 'width' => 550
+* 'colorscheme' => light, // light/dark
+* 'mobile' => 'Auto-detected',
+* 'num-posts' => 10,
+* 'order-by' => 'social', // social/reverse_time/time
+* 'width' => 550
+````
 	
 `<?php echo $this->Facebook->comments($options = []); ?>`
 
 ##### Embedded Posts (Facebook Embedded Posts)
+````
 Default Options
-	- 'width' => 500
+* 'width' => 500
+````
 	
 `<?php echo $this->Facebook->embeddedPosts($options = []); ?>`
 
