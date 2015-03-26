@@ -333,6 +333,29 @@ EOT;
     }
     
     /**
+     * Created facebook embedded videos
+     * 
+     * options
+     *	    href	-> not set
+     *	    width	-> 500
+     * @see https://developers.facebook.com/docs/plugins/embedded-video-player
+     * @param type $options
+     * @return type
+     */
+    public function embeddedVideos($options = []){
+	$options = array_merge([
+	    'width' => 500
+	], $_);
+	
+	return <<<EOT
+	<div class="fb-video" 
+	    data-href="{$options['href']}" 
+		data-width="{$options['width']}">
+		    </div>
+EOT;
+    }
+    
+    /**
      * Return HREF
      * 
      * @param type $options

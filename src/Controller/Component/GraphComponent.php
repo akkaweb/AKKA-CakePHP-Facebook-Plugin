@@ -175,6 +175,7 @@ class GraphComponent extends Component {
      */
     public function initialize(array $config)
     {
+	parent::initialize($config);
 	/**
 	 * Assigned merge configuration
 	 */
@@ -184,7 +185,7 @@ class GraphComponent extends Component {
 	 * Get current controller
 	 */
 	$this->Controller = $this->_registry->getController();
-
+	//debug($this->Controller->request);
 	/**
 	 * Start session if not already started
 	 */
@@ -266,8 +267,10 @@ class GraphComponent extends Component {
 	/**
 	 * Checks if user is trying to authenticate by watching for what Facebook returns
 	 */
+ 	//debug($this->Controller->request->query('code'));
 	if ($this->Controller->request->query('code'))
 	{
+		//debug($this->Controller->request);die;
 	    /**
 	     * Queries database for existing Facebook Id
 	     */
