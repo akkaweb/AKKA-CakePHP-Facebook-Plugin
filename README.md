@@ -189,5 +189,27 @@ Default Options
 `<?php echo $this->Facebook->embeddedPosts($options = []); ?>`
 ````
 
+##### Embedded Video (Facebook Embedded Video)
+````
+Default Options
+* 'href' => ''
+* 'width' => 500
+	
+`<?php echo $this->Facebook->embeddedVideo($options = []); ?>`
+````
+
+##### Page Plugin (Facebook Page Plugin)
+````
+Default Options
+* 'href' => 'https://www.facebook.com/facebook',
+* 'height' => 300,
+* 'hide-cover' => false,
+* 'show-facepile' => true,
+* 'show-posts' => false,
+* 'width' => 500
+	
+`<?php echo $this->Facebook->page($options = []); ?>`
+````
+
 ## Disclaimer
 Although we have done many tests to ensure this plugin works as intended, we advise you to use it at your own risk. As with anything else, you should first test any addition to your application in a test environment. Please provide any fixes or enhancements via issue or pull request.
