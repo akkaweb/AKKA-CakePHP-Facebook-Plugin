@@ -342,7 +342,7 @@ EOT;
      * @param type $options
      * @return type
      */
-    public function embeddedVideos($options = []){
+    public function embeddedVideo($options = []){
 	$options = array_merge([
 	    'href' => '',
 	    'width' => 500
@@ -357,7 +357,7 @@ EOT;
     }
     
     /**
-     * Created facebook embedded videos
+     * Created facebook page plugin
      * 
      * options
      *	    href	-> https://www.facebook.com/facebook
