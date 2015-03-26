@@ -23,6 +23,18 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 ## Included #######################################################
 - Facebook Graph Component
 - Facebook Graph Helper
+	- $this->Facebook->loginLink()
+	- $this->Facebook->loginButton()
+	- $this->Facebook->likeButton()
+	- $this->Facebook->shareButton()
+	- $this->Facebook->sendButton()
+	- $this->Facebook->followButton()
+	- $this->Facebook->comments()
+	- $this->Facebook->embeddedPosts()
+	- $this->Facebook->embeddedVideos()
+	- $this->Facebook->page()
+	
+***** See below for more details on how to use each
 
 ## Installation #######################################################
 
