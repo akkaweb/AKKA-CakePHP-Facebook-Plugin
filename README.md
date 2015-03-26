@@ -31,7 +31,7 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 	- $this->Facebook->followButton()
 	- $this->Facebook->comments()
 	- $this->Facebook->embeddedPosts()
-	- $this->Facebook->embeddedVideos()
+	- $this->Facebook->embeddedVideo()
 	- $this->Facebook->page()
 	
 ***** See below for more details on how to use each
