@@ -102,6 +102,9 @@ Note: FacebookHelper is automatically loaded by the `Graph Component`. If that i
 - Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
 ##### Login Link (Customizable Facebook link <a href)
+
+Reference - https://developers.facebook.com/docs/plugins/login-button
+
 ````
 Optional Settings Array
 * id 	-> Link id
@@ -114,6 +117,9 @@ Optional Settings Array
 ````
 
 ##### Login Button (Facebook Button)
+
+Reference - https://developers.facebook.com/docs/plugins/login-button
+
 ````
 Default Options
 * 'auto-logout-link' => false,
@@ -127,6 +133,9 @@ Default Options
 ````
 
 ##### Like Button (Facebook Like)
+
+Reference - https://developers.facebook.com/docs/plugins/like-button
+
 ````
 Default Options
 * 'action' => 'like', // like, recommend
@@ -139,6 +148,9 @@ Default Options
 ````
 
 ##### Share Button (Facebook Share)
+
+Reference - https://developers.facebook.com/docs/plugins/share-button
+
 ````
 Default Options
 * 'layout' => 'button_count' // button_count/box_count/button/icon_link/icon/link
@@ -147,6 +159,9 @@ Default Options
 ````
 
 ##### Send Button (Facebook Send)
+
+Reference - https://developers.facebook.com/docs/plugins/send-button
+
 ````
 Default Options
 * 'width' => 50,
@@ -157,6 +172,9 @@ Default Options
 ````
 
 ##### Follow Button (Facebook Follow)
+
+Reference - https://developers.facebook.com/docs/plugins/follow-button
+
 ````
 Default Options
 * 'width' => 300,
@@ -170,6 +188,9 @@ Default Options
 ````
 
 ##### Comments (Facebook Comments)
+
+Reference - https://developers.facebook.com/docs/plugins/comments
+
 ````
 Default Options
 * 'colorscheme' => light, // light/dark
@@ -182,6 +203,9 @@ Default Options
 ````
 
 ##### Embedded Posts (Facebook Embedded Posts)
+
+Reference - https://developers.facebook.com/docs/plugins/embedded-posts
+
 ````
 Default Options
 * 'width' => 500
@@ -190,6 +214,9 @@ Default Options
 ````
 
 ##### Embedded Video (Facebook Embedded Video)
+
+Reference - https://developers.facebook.com/docs/plugins/embedded-video-player
+
 ````
 Default Options
 * 'href' => ''
@@ -199,6 +226,9 @@ Default Options
 ````
 
 ##### Page Plugin (Facebook Page Plugin)
+
+Reference - https://developers.facebook.com/docs/plugins/page-plugin
+
 ````
 Default Options
 * 'href' => 'https://www.facebook.com/facebook',
@@ -210,6 +240,10 @@ Default Options
 	
 `<?php echo $this->Facebook->page($options = []); ?>`
 ````
+
+#### Coming Soon
+
+- Feed Dialog
 
 ## Disclaimer
 Although we have done many tests to ensure this plugin works as intended, we advise you to use it at your own risk. As with anything else, you should first test any addition to your application in a test environment. Please provide any fixes or enhancements via issue or pull request.
