@@ -344,6 +344,7 @@ EOT;
      */
     public function embeddedVideos($options = []){
 	$options = array_merge([
+	    'href' => '',
 	    'width' => 500
 	], $_);
 	
@@ -352,6 +353,43 @@ EOT;
 	    data-href="{$options['href']}" 
 		data-width="{$options['width']}">
 		    </div>
+EOT;
+    }
+    
+    /**
+     * Created facebook embedded videos
+     * 
+     * options
+     *	    href	-> https://www.facebook.com/facebook
+     *	    width	-> 500
+     *	    height	-> 300
+     *	    hide-cover	-> false
+     *	    show-facepile -> true
+     *	    show-posts	-> false
+     * 
+     * @see https://developers.facebook.com/docs/plugins/embedded-video-player
+     * @param type $options
+     * @return type
+     */
+    public function page($options = []){
+	$options = array_merge([
+	    'href' => 'https://www.facebook.com/facebook',
+	    'height' => 300,
+	    'hide-cover' => false,
+	    'show-facepile' => true,
+	    'show-posts' => false,
+	    'width' => 500
+	], $_);
+	
+	return <<<EOT
+	<div class="fb-video" 
+	    data-height="{$options['height']}"  
+		data-hide-cover="{$options['hide-cover']}"  
+		    data-show-facepile="{$options['show-facepile']}"  
+			data-show-posts="{$options['show-posts']}"
+			    data-href="{$options['href']}" 
+				data-width="{$options['width']}">
+				    </div>
 EOT;
     }
     
