@@ -291,7 +291,7 @@ EOT;
      */
     public function comments($options = []){
 	$options = array_merge([
-	    'colorscheme' => light, // light/dark
+	    'colorscheme' => 'light', // light/dark
 	    'mobile' => 'Auto-detected',
 	    'num-posts' => 10,
 	    'order-by' => 'social', // social/reverse_time/time
