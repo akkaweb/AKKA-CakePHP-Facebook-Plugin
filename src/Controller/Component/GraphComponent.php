@@ -131,14 +131,14 @@ class GraphComponent extends Component {
      * 
      * @var type Object
      */
-    private $Users = null;
+    protected $Users = null;
 
     /**
      * Components Controller
      * 
      * @var type Object
      */
-    private $Controller = null;
+    protected $Controller = null;
 
     /**
      * Application Components
@@ -358,7 +358,7 @@ class GraphComponent extends Component {
      * Add facebook_id to existing user based on their email
      * @param type $user
      */
-    private function __updateAccount($user)
+    protected function __updateAccount($user)
     {
 	$this->Users->patchEntity($user, ['facebook_id' => $this->FacebookId]);
 	if ($result = $this->Users->save($user))
@@ -370,7 +370,7 @@ class GraphComponent extends Component {
     /**
      * Create a new user using Facebook Credentials
      */
-    private function __newAccount()
+    protected function __newAccount()
     {
 	$data = [
 	    $this->_configs['user_columns']['username'] => $this->__generateUsername(),
@@ -394,7 +394,7 @@ class GraphComponent extends Component {
      * 
      * @param type $result
      */
-    private function __autoLogin($result)
+    protected function __autoLogin($result)
     {
 	$authUser = $this->Users->get($result->id)->toArray();
 
@@ -407,7 +407,7 @@ class GraphComponent extends Component {
      * 
      * @return type String
      */
-    private function __generateUsername()
+    protected function __generateUsername()
     {
 	$username = strtolower($this->FacebookFirstName . $this->FacebookLastName);
 
@@ -423,7 +423,7 @@ class GraphComponent extends Component {
      * 
      * @return type String
      */
-    private function __randomPassword()
+    protected function __randomPassword()
     {
 	$alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
 	$pass = array(); //remember to declare $pass as an array
