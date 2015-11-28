@@ -4,6 +4,7 @@ namespace AkkaFacebook\View\Helper;
 use Cake\View\Helper;
 use Cake\View\View;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;
 use Facebook\FacebookRequest;
@@ -400,7 +401,7 @@ EOT;
      * @return type
      */
     private function __href($options){
-	return (isset($options['href']) && $options['href'] != '') ? $options['href'] : $this->here;
+	return (isset($options['href']) && $options['href'] != '') ? $options['href'] : Router::url(null, true);
     }
 
 }
