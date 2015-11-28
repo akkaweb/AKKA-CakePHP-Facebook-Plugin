@@ -286,7 +286,7 @@ class GraphComponent extends Component {
 		if ($this->Auth->user() && $this->Auth->user('facebook_id') != $existing_user['facebook_id'])
 		{
 		    $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
-		    exit;
+		    $this->Controller->redirect($this->_configs['post_login_redirect']);
 		}
 		else
 		{
