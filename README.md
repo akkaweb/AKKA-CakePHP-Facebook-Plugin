@@ -24,7 +24,6 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 - Facebook Graph Component
 - Facebook Graph Helper
 	- $this->Facebook->loginLink()
-	- $this->Facebook->loginButton()
 	- $this->Facebook->likeButton()
 	- $this->Facebook->shareButton()
 	- $this->Facebook->sendButton()
@@ -114,22 +113,6 @@ Optional Settings Array
 * label -> Hyperlink text
 	
 `<?php echo $this->Facebook->loginLink($options = []); ?>`
-````
-
-##### Login Button (Facebook Button)
-
-Reference - https://developers.facebook.com/docs/plugins/login-button
-
-````
-Default Options
-* 'auto-logout-link' => false,
-* 'max-rows' => 1,
-* 'onlogin' => null,
-* 'size' => 'small',
-* 'show-faces' => false,
-* 'default-audience' => 'friends'
-
-`<?php echo $this->Facebook->loginButton($options = []); ?>`
 ````
 
 ##### Like Button (Facebook Like)
