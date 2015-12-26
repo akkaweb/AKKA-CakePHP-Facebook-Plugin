@@ -85,7 +85,7 @@ public function initialize(){
 	    'app_id' => 'your-fb-app-id',
 	    'app_secret' => 'your-fb-app-secret',
 	    'app_scope' => 'email', // https://developers.facebook.com/docs/facebook-login/permissions/v2.3
-	    'redirect_url' => '', //ie. Router::url(['controller' => 'Users', 'action' => 'login'], TRUE),
+	    'redirect_url' => Router::url(['controller' => 'Users', 'action' => 'login'], TRUE), // This should be enabled by default
 	    'post_login_redirect' => '' //ie. Router::url(['controller' => 'Users', 'action' => 'account'], TRUE)
 	    // 'user_columns' => ['first_name' => 'fname', 'last_name' => 'lname', 'username' => 'uname', 'password' => 'pass'] //not required
     ]);
