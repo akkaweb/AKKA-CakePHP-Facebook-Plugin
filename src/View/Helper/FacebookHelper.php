@@ -296,13 +296,13 @@ EOT;
 	    'mobile' => 'Auto-detected',
 	    'num-posts' => 10,
 	    'order-by' => 'social', // social/reverse_time/time
-	    'width' => 550
+	    'width' => 600
 	], $options);
 	
 	return <<<EOT
 	<div class="fb-comments" 
 	    data-href="{$this->here}" 
-		data-numposts="{$options['num_posts']}" 
+		data-numposts="{$options['num-posts']}" 
 		    data-colorscheme="{$options['colorscheme']}" 
 			data-mobile="{$options['mobile']}" 
 			    data-order-by="{$options['order-by']}" 
