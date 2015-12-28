@@ -411,7 +411,7 @@ class GraphComponent extends Component {
     {
 	$username = strtolower($this->FacebookFirstName . $this->FacebookLastName);
 
-	while ($this->Users->find()->where(['username' => $username])->first()) {
+	while ($this->Users->find()->where([$this->_configs['user_columns']['username'] => $username])->first()) {
 	    $username = $username . rand(0, 900);
 	}
 
