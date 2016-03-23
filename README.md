@@ -4,6 +4,7 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
 
 [![Total Downloads](https://poser.pugx.org/akkaweb/cakephp-facebook/downloads.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
 [![License](https://poser.pugx.org/akkaweb/cakephp-facebook/license.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
+[![Gitter](https://badges.gitter.im/akkaweb/AKKA-CakePHP-Facebook-Plugin.svg)](https://gitter.im/akkaweb/AKKA-CakePHP-Facebook-Plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Requirements #######################################################
 - CakePHP 3.x with Auth component correctly setup. Refer to http://book.cakephp.org/3.0/en/controllers/components/authentication.html for setup
