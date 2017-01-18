@@ -1,6 +1,6 @@
 {
     "name": "akkaweb/cakephp-facebook",
-    "description": "CakePHP 3 Facebook Plugin",
+    "description": "CakePHP 3 Facebook Plugin - Facebook SDKv5",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "cakephp3", "facebook"],
     "license": "MIT",
