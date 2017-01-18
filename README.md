@@ -11,8 +11,8 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
 
 ## Requirements #######################################################
 - CakePHP 3.x with Auth component correctly setup. Refer to http://book.cakephp.org/3.0/en/controllers/components/authentication.html for setup
-- PHP 5.4.6+
-- Facebook PHP SDK 4.0+
+- PHP 5.6+
+- Facebook PHP SDK 5.0+
 - Users Table with at least the following columns
     * `facebook_id varchar(20)`
     * `first_name` // can be set in config
