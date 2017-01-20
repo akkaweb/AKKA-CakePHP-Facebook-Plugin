@@ -84,7 +84,8 @@ class GraphComponent extends Component
      * 
      * @var type Object
      */
-    public $FacebookSession = null;
+    public $Session = null;
+    public $GraphUser = null;
 
     /**
      * Facebook User Full Name
@@ -157,7 +158,7 @@ class GraphComponent extends Component
     protected $_defaultConfig = [
         'app_id' => '1177781925662543',
         'app_secret' => 'd70509bc28abd73103259b40ee82c472',
-        'app_scope' => [],
+        'app_scope' => ['email', 'public_profile'],
         'permissions' => ['email'],
         'redirect_url' => '/users/login',
         'post_login_redirect' => '/',
@@ -188,12 +189,19 @@ class GraphComponent extends Component
          * Get current controller
          */
         $this->Controller = $this->_registry->getController();
+
+        /**
+         * Get session
+         */
+        $this->Session = $this->Controller->request->session();
+
+
         //debug($this->Controller->request);
         /**
          * Start session if not already started
          */
         if ($this->isSessionStarted() === FALSE) {
-            $this->Controller->request->session()->start();
+            $this->Session->start();
         }
 
         /**
@@ -201,7 +209,7 @@ class GraphComponent extends Component
          */
         if ($this->_configs['enable_graph_helper']) {
             $this->Controller->helpers = [
-                'AkkaFacebook.Facebook' => [
+                'Akkaweb/Facebook.Facebook' => [
                     'redirect_url' => $this->_configs['redirect_url'],
                     'app_id' => $this->_configs['app_id'],
                     'app_scope' => $this->_configs['app_scope']
@@ -224,7 +232,7 @@ class GraphComponent extends Component
     public function beforeFilter(Event $event)
     {
         //FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
-        $fb = new Facebook\Facebook([
+        $fb = new \Facebook\Facebook([
             'app_id' => $this->_configs['app_id'],
             'app_secret' => $this->_configs['app_secret'],
             'default_graph_version' => 'v2.4',
@@ -232,20 +240,11 @@ class GraphComponent extends Component
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
 
-        //$this->FacebookHelper = new FacebookRedirectLoginHelper($this->FacebookRedirectUrl);
         $this->FacebookHelper = $fb->getRedirectLoginHelper();
 
-//        try {
-//            $this->FacebookSession = $this->FacebookHelper->getSessionFromRedirect();
-//        } catch (FacebookRequestException $ex) {
-//            $this->log($ex->getMessage());
-//        } catch (Exception $ex) {
-//            $this->log($ex->getMessage());
-//        }
-
         try {
-            if (isset($this->Controller->request->session('facebook_access_token'))) {
-                $this->FacebookAccessToken = $this->Controller->request->session('facebook_access_token');
+            if (null !== $this->Session->read('facebook_access_token')) {
+                $this->FacebookAccessToken = $this->Session->read('facebook_access_token');
                 $fb->setDefaultAccessToken($this->FacebookAccessToken);
             } else {
                 $this->FacebookAccessToken = $this->FacebookHelper->getAccessToken();
@@ -261,21 +260,24 @@ class GraphComponent extends Component
 
 
         if (isset($this->FacebookAccessToken)) {
-            $this->Controller->request->session('facebook_access_token') = (string) $this->FacebookAccessToken;
+            $this->Session->write('facebook_access_token', (string) $this->FacebookAccessToken);
             $oAuth2Client = $fb->getOAuth2Client();
             $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($this->FacebookAccessToken);
-            $this->Controller->request->session('facebook_access_token') = (string) $longLivedAccessToken;
-            $fb->setDefaultAccessToken($this->Controller->request->session('facebook_access_token'));
+            $this->Session->write('facebook_access_token', (string) $longLivedAccessToken);
+            $fb->setDefaultAccessToken($this->Session->read('facebook_access_token'));
 
-            // redirect the user back to the same page if it has "code" GET variable
-            if (isset($_GET['code'])) {
-                header('Location: ./');
-            }
             // getting basic info about user
             try {
                 $this->FacebookRequest = $fb->get('/me?fields=name,first_name,last_name,email');
-                $profile = $this->FacebookRequest->getGraphNode()->asArray();
-                print_r($profile);
+                $this->GraphUser = $this->FacebookRequest->getGraphUser();
+
+                $this->FacebookName = $this->GraphUser->getName();
+                $this->FacebookFirstName = $this->GraphUser->getFirstName();
+                $this->FacebookLastName = $this->GraphUser->getLastName();
+                $this->FacebookEmail = $this->GraphUser->getEmail();
+                $this->FacebookId = $this->GraphUser->getId();
+
+                Configure::write('fb_profile', $this->GraphUser);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
                 // When Graph returns an error
                 echo 'Graph returned an error: ' . $e->getMessage();
@@ -288,26 +290,6 @@ class GraphComponent extends Component
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
                 exit;
             }
-
-            // replace your website URL same as added in the developers.facebook.com/apps e.g. if you used http instead of https and you used non-www version or www version of your website then you must add the same here
-//            $loginUrl = $helper->getLoginUrl('https://sohaibilyas.com/fbapp/', $permissions);
-//            echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-//            try {
-//                $this->FacebookRequest = new FacebookRequest($this->FacebookSession, 'GET', '/me?fields=name,email,first_name,last_name');
-//                $this->FacebookResponse = $this->FacebookRequest->execute();
-//                $this->FacebookGraphObject = $this->FacebookResponse->getGraphObject();
-//                $this->FacebookGraphUser = $this->FacebookGraphObject->cast(GraphUser::className());
-//
-//                $this->FacebookName = $this->FacebookGraphUser->getName();
-//                $this->FacebookFirstName = $this->FacebookGraphUser->getFirstName();
-//                $this->FacebookLastName = $this->FacebookGraphUser->getLastName();
-//                $this->FacebookEmail = $this->FacebookGraphUser->getEmail();
-//                $this->FacebookId = $this->FacebookGraphUser->getId();
-//            } catch (FacebookRequestException $ex) {
-//                $this->log($ex->getMessage());
-//            } catch (Exception $ex) {
-//                $this->log($ex->getMessage());
-//            }
         }
     }
 
@@ -318,6 +300,7 @@ class GraphComponent extends Component
      */
     public function startup(Event $event)
     {
+
         /**
          * Checks if user is trying to authenticate by watching for what Facebook returns
          */
@@ -328,6 +311,8 @@ class GraphComponent extends Component
              * Queries database for existing Facebook Id
              */
             $queryFacebookId = $this->Users->find('all')->where(['facebook_id' => $this->FacebookId])->first();
+
+
 
             /**
              * Authenticates existing user into application
@@ -386,7 +371,7 @@ class GraphComponent extends Component
         /**
          * Sets/Configures fb_login_url to be assigned in Facebook Login Button
          */
-        $loginUrl = $this->FacebookHelper->getLoginUrl([$this->_configs['app_scope']]);
+        $loginUrl = $this->FacebookHelper->getLoginUrl('http://www.kurti.life/login', $this->_configs['permissions']);
 
         $this->Controller->set('fb_login_url', $loginUrl);
         Configure::write('fb_login_url', $loginUrl);
