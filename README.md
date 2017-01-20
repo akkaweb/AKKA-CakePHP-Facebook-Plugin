@@ -1,8 +1,4 @@
-> IMPORTANT:
-> Although this plugin will continue to be available, continued development and support is now halted. 
-> For existing applications, I would suggest using this great plugin https://github.com/ADmad/CakePHP-HybridAuth.
-> For new applications https://github.com/CakeDC/users.
-> Both allow Social login to various other services and not just Facebook
+> This branch (Master) will be kept to support SDKv4. I am currently working on supporting Facebook SDKv5. Although it works, it is still going thru testing and at Beta. Go to the 'sdk5' branch for instructions on how to install and test.
 
 # CakePHP 3 Facebook Plugin
 
