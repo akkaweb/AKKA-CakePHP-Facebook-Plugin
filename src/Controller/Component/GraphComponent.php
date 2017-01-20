@@ -6,7 +6,7 @@
  * @copyright (c) 2015 akkaweb.com
  * @license MIT
  */
-namespace AkkaFacebook\Controller\Component;
+namespace Akkaweb\Facebook\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
