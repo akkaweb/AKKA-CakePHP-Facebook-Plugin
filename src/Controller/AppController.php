@@ -1,6 +1,6 @@
 <?php
 
-namespace AkkaFacebook\Controller;
+namespace Akkaweb\Facebook\Controller;
 
 use App\Controller\AppController as BaseController;
 
