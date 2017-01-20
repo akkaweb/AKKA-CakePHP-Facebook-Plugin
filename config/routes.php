@@ -1,6 +1,6 @@
 <?php
 use Cake\Routing\Router;
 
-Router::plugin('AkkaFacebook', function ($routes) {
+Router::plugin('Facebook', function ($routes) {
     $routes->fallbacks();
 });
