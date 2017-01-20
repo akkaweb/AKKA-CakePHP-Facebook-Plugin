@@ -19,12 +19,12 @@
     },
     "autoload": {
 	"psr-4": {
-	    "Facebook\\": "src"
+	    "Akkaweb\\Facebook\\": "src"
 	}
     },
     "autoload-dev": {
 	"psr-4": {
-	    "Facebook\\Test\\": "tests",
+	    "Akkaweb\\Facebook\\Test\\": "tests",
 	    "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
 	}
     },
