@@ -47,7 +47,7 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 
 ```php
 "require": {
-	"akkaweb/cakephp-facebook": "dev-master"
+	"akkaweb/cakephp-facebook": "dev-sdk5"
 }
 ```
 
@@ -58,13 +58,6 @@ sudo php composer.phar update
 ```
 Note: if `composer.phar` is not found, you need to install it. Follow CakePHP's documentation here -> http://book.cakephp.org/3.0/en/installation.html. Refer to Installing Cakephp section
 
-##### Git Clone (plugins/AkkaFacebook)
-`git clone git@github.com:akkaweb/AKKA-CakePHP-Facebook-Plugin.git`
-
-##### Download
-`https://github.com/akkaweb/AKKA-CakePHP-Facebook-Plugin/archive/master.zip`
-
-Note: When installing with either manual download or Git Clone and CakePHP complains it cannot find the plugin, you need to add the plugin to `vendor/cakephp-plugins.php` in the `plugins` array [] --> `'AkkaFacebook' => $baseDir . '/plugins/AkkaFacebook/'`. If you are using composer, running `php composer.phar dumpautoload` could be sufficient. If it does not work add the following to the `"autoload"` section in the root application's `composer.json` file in the `"psr-4":` section: `"AkkaFacebook\\": "./plugins/AkkaFacebook/src"`
 
 
 ## Configuration #######################################################
@@ -72,7 +65,7 @@ Note: When installing with either manual download or Git Clone and CakePHP compl
 1. Load the plugin in your application's `bootstrap.php` file:
 
 ```php
-Plugin::load('AkkaFacebook', ['bootstrap' => false, 'routes' => true]);
+Plugin::load('Akkaweb\Facebook', ['bootstrap' => false, 'routes' => true]);
 ```
 
 2. Load the plugin's component in `AppController.php` 
@@ -85,7 +78,7 @@ Note: You need to obtain your facebook `App Id` and `App Secret` from http://dev
 public function initialize(){
     parent::initialize();
     
-    $this->loadComponent('AkkaFacebook.Graph', [
+    $this->loadComponent('Akkaweb\Facebook.Graph', [
 	    'app_id' => 'your-fb-app-id',
 	    'app_secret' => 'your-fb-app-secret',
 	    'app_scope' => 'email,public_profile', // https://developers.facebook.com/docs/facebook-login/permissions/v2.4
@@ -99,10 +92,6 @@ public function initialize(){
 ## Usage #######################################################
 
 Note: FacebookHelper is automatically loaded by the `Graph Component`. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
-
-##### Helper Template File Setup
-
-- Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
 ##### Login Link (Customizable Facebook link <a href)
 
