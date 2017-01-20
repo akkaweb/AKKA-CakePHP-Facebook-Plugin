@@ -156,8 +156,8 @@ class GraphComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'app_id' => '1177781925662543',
-        'app_secret' => 'd70509bc28abd73103259b40ee82c472',
+        'app_id' => '',
+        'app_secret' => '',
         'app_scope' => ['email', 'public_profile'],
         'permissions' => ['email'],
         'redirect_url' => '/users/login',
