@@ -269,7 +269,10 @@ class GraphComponent extends Component
             // getting basic info about user
             try {
                 $this->FacebookRequest = $fb->get('/me?fields=name,first_name,last_name,email');
+                //$this->FacebookRequestFriends = $fb->get('/me/taggable_friends?fields=name&limit=100');
+
                 $this->GraphUser = $this->FacebookRequest->getGraphUser();
+                //$friends = $this->FacebookRequestFriends->getGraphEdge();
 
                 $this->FacebookName = $this->GraphUser->getName();
                 $this->FacebookFirstName = $this->GraphUser->getFirstName();
@@ -277,7 +280,7 @@ class GraphComponent extends Component
                 $this->FacebookEmail = $this->GraphUser->getEmail();
                 $this->FacebookId = $this->GraphUser->getId();
 
-                Configure::write('fb_profile', $this->GraphUser);
+                //Configure::write('fb_profile', $this->GraphUser);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
                 // When Graph returns an error
                 echo 'Graph returned an error: ' . $e->getMessage();
