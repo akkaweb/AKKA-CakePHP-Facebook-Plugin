@@ -236,7 +236,7 @@ class GraphComponent extends Component
             'app_id' => $this->_configs['app_id'],
             'app_secret' => $this->_configs['app_secret'],
             'default_graph_version' => 'v2.4',
-            'persistent_data_handler'=>'session'
+            'persistent_data_handler' => 'session'
         ]);
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
