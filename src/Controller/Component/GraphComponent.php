@@ -242,6 +242,10 @@ class GraphComponent extends Component
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
         
         $this->Session->write('FBRLH_state', $this->request->data('state'));
+        
+        if ( isset( $_GET['state'] ) ) {
+            $_SESSION['FBRLH_state']=$_GET['state'];
+        }
 
         $this->FacebookHelper = $fb->getRedirectLoginHelper();
 
