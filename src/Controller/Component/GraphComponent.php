@@ -240,10 +240,10 @@ class GraphComponent extends Component
         ]);
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
-
-        $this->FacebookHelper = $fb->getRedirectLoginHelper();
         
         $this->Session->write('FBRLH_state', $this->request->data('state'));
+
+        $this->FacebookHelper = $fb->getRedirectLoginHelper();
 
         try {
             if (null !== $this->Session->read('facebook_access_token')) {
