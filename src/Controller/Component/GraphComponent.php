@@ -28,8 +28,14 @@ use Facebook\FacebookAuthorizationException;
 /**
  * Graph component
  */
-class GraphComponent extends Component
-{
+class GraphComponent extends Component {
+
+    /**
+     *
+     * @var type Facebook
+     */
+    public $Facebook = null;
+
     /**
      * 	Facebook Redirect Login Helper
      * 
@@ -177,8 +183,7 @@ class GraphComponent extends Component
      * 
      * @param array $config
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
         /**
          * Assigned merge configuration
@@ -229,10 +234,9 @@ class GraphComponent extends Component
      * 
      * @param \Cake\Event\Event $event
      */
-    public function beforeFilter(Event $event)
-    {
+    public function beforeFilter(Event $event) {
         //FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
-        $fb = new \Facebook\Facebook([
+        $this->Facebook = new \Facebook\Facebook([
             'app_id' => $this->_configs['app_id'],
             'app_secret' => $this->_configs['app_secret'],
             'default_graph_version' => 'v2.4',
@@ -240,19 +244,19 @@ class GraphComponent extends Component
         ]);
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
-        
+
         $this->Session->write('FBRLH_state', $this->request->data('state'));
-        
-        if ( isset( $_GET['state'] ) ) {
-            $_SESSION['FBRLH_state']=$_GET['state'];
+
+        if (isset($_GET['state'])) {
+            $_SESSION['FBRLH_state'] = $_GET['state'];
         }
 
-        $this->FacebookHelper = $fb->getRedirectLoginHelper();
+        $this->FacebookHelper = $this->Facebook->getRedirectLoginHelper();
 
         try {
             if (null !== $this->Session->read('facebook_access_token')) {
                 $this->FacebookAccessToken = $this->Session->read('facebook_access_token');
-                $fb->setDefaultAccessToken($this->FacebookAccessToken);
+                $this->Facebook->setDefaultAccessToken($this->FacebookAccessToken);
             } else {
                 $this->FacebookAccessToken = $this->FacebookHelper->getAccessToken();
             }
@@ -268,15 +272,15 @@ class GraphComponent extends Component
 
         if (isset($this->FacebookAccessToken)) {
             $this->Session->write('facebook_access_token', (string) $this->FacebookAccessToken);
-            $oAuth2Client = $fb->getOAuth2Client();
+            $oAuth2Client = $this->Facebook->getOAuth2Client();
             $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($this->FacebookAccessToken);
             $this->Session->write('facebook_access_token', (string) $longLivedAccessToken);
-            $fb->setDefaultAccessToken($this->Session->read('facebook_access_token'));
+            $this->Facebook->setDefaultAccessToken($this->Session->read('facebook_access_token'));
 
             // getting basic info about user
             try {
-                $this->FacebookRequest = $fb->get('/me?fields=name,first_name,last_name,email');
-                //$this->FacebookRequestFriends = $fb->get('/me/taggable_friends?fields=name&limit=100');
+                $this->FacebookRequest = $this->Facebook->get('/me?fields=name,first_name,last_name,email');
+                //$this->FacebookRequestFriends = $this->Facebook->get('/me/taggable_friends?fields=name&limit=100');
 
                 $this->GraphUser = $this->FacebookRequest->getGraphUser();
                 //$friends = $this->FacebookRequestFriends->getGraphEdge();
@@ -308,8 +312,7 @@ class GraphComponent extends Component
      * 
      * @param \Cake\Event\Event $event
      */
-    public function startup(Event $event)
-    {
+    public function startup(Event $event) {
 
         /**
          * Checks if user is trying to authenticate by watching for what Facebook returns
@@ -376,8 +379,7 @@ class GraphComponent extends Component
      * 
      * @param \Cake\Event\Event $event
      */
-    public function beforeRender(Event $event)
-    {
+    public function beforeRender(Event $event) {
         /**
          * Sets/Configures fb_login_url to be assigned in Facebook Login Button
          */
@@ -388,11 +390,30 @@ class GraphComponent extends Component
     }
 
     /**
+     * Get list of logged User's friends
+     * 
+     * @param type Boolean $rand
+     * @param type Array $options
+     * @return type Array $friends
+     */
+    public function getFriends($rand = false, $options = []) {
+        $fields = isset($options['fields']) ? $options['fields'] : 'name,picture.width(300).height(300)';
+        $limit = isset($options['limit']) ? $options['limit'] : 100;
+
+        $this->FacebookRequestFriends = $this->Facebook->get("/me/taggable_friends?fields=$fields&limit=$limit");
+        $friends = $this->FacebookRequestFriends->getGraphEdge()->asArray();
+
+        if ($rand) {
+            return $friends[array_rand($friends)];
+        }
+        return $friends;
+    }
+
+    /**
      * Add facebook_id to existing user based on their email
      * @param type $user
      */
-    protected function __updateAccount($user)
-    {
+    protected function __updateAccount($user) {
         $this->Users->patchEntity($user, ['facebook_id' => $this->FacebookId]);
         if ($result = $this->Users->save($user)) {
             $this->__autoLogin($result);
@@ -402,8 +423,7 @@ class GraphComponent extends Component
     /**
      * Create a new user using Facebook Credentials
      */
-    protected function __newAccount()
-    {
+    protected function __newAccount() {
         $data = [
             $this->_configs['user_columns']['username'] => $this->__generateUsername(),
             $this->_configs['user_columns']['first_name'] => $this->FacebookFirstName,
@@ -425,8 +445,7 @@ class GraphComponent extends Component
      * 
      * @param type $result
      */
-    protected function __autoLogin($result)
-    {
+    protected function __autoLogin($result) {
         $authUser = $this->Users->get($result->id)->toArray();
 
         $this->Auth->setUser($authUser);
@@ -438,8 +457,7 @@ class GraphComponent extends Component
      * 
      * @return type String
      */
-    protected function __generateUsername()
-    {
+    protected function __generateUsername() {
         $username = strtolower($this->FacebookFirstName . $this->FacebookLastName);
 
         while ($this->Users->find()->where([$this->_configs['user_columns']['username'] => $username])->first()) {
@@ -454,8 +472,7 @@ class GraphComponent extends Component
      * 
      * @return type String
      */
-    protected function __randomPassword()
-    {
+    protected function __randomPassword() {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
@@ -469,8 +486,7 @@ class GraphComponent extends Component
     /**
      * @return bool
      */
-    public function isSessionStarted()
-    {
+    public function isSessionStarted() {
         if (php_sapi_name() !== 'cli') {
             if (version_compare(phpversion(), '5.4.0', '>=')) {
                 return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
@@ -480,4 +496,5 @@ class GraphComponent extends Component
         }
         return FALSE;
     }
+
 }
