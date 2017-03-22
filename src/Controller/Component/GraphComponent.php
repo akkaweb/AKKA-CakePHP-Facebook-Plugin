@@ -37,6 +37,12 @@ class GraphComponent extends Component {
     public $Facebook = null;
 
     /**
+     *
+     * @var type FacebookProfilePicture
+     */
+    public $FacebookProfilePicture = null;
+
+    /**
      * 	Facebook Redirect Login Helper
      * 
      * @var type Object
@@ -201,7 +207,7 @@ class GraphComponent extends Component {
         $this->Session = $this->Controller->request->session();
 
 
-        //debug($this->Controller->request);
+//debug($this->Controller->request);
         /**
          * Start session if not already started
          */
@@ -235,11 +241,11 @@ class GraphComponent extends Component {
      * @param \Cake\Event\Event $event
      */
     public function beforeFilter(Event $event) {
-        //FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
+//FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
         $this->Facebook = new \Facebook\Facebook([
             'app_id' => $this->_configs['app_id'],
             'app_secret' => $this->_configs['app_secret'],
-            'default_graph_version' => 'v2.4',
+            'default_graph_version' => 'v2.8',
             'persistent_data_handler' => 'session'
         ]);
 
@@ -277,13 +283,13 @@ class GraphComponent extends Component {
             $this->Session->write('facebook_access_token', (string) $longLivedAccessToken);
             $this->Facebook->setDefaultAccessToken($this->Session->read('facebook_access_token'));
 
-            // getting basic info about user
+// getting basic info about user
             try {
                 $this->FacebookRequest = $this->Facebook->get('/me?fields=name,first_name,last_name,email');
-                //$this->FacebookRequestFriends = $this->Facebook->get('/me/taggable_friends?fields=name&limit=100');
+//$this->FacebookRequestFriends = $this->Facebook->get('/me/taggable_friends?fields=name&limit=100');
 
                 $this->GraphUser = $this->FacebookRequest->getGraphUser();
-                //$friends = $this->FacebookRequestFriends->getGraphEdge();
+//$friends = $this->FacebookRequestFriends->getGraphEdge();
 
                 $this->FacebookName = $this->GraphUser->getName();
                 $this->FacebookFirstName = $this->GraphUser->getFirstName();
@@ -291,16 +297,16 @@ class GraphComponent extends Component {
                 $this->FacebookEmail = $this->GraphUser->getEmail();
                 $this->FacebookId = $this->GraphUser->getId();
 
-                //Configure::write('fb_profile', $this->GraphUser);
+//Configure::write('fb_profile', $this->GraphUser);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                // When Graph returns an error
+// When Graph returns an error
                 echo 'Graph returned an error: ' . $e->getMessage();
                 session_destroy();
-                // redirecting user back to app login page
+// redirecting user back to app login page
                 header("Location: ./");
                 exit;
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                // When validation fails or other local issues
+// When validation fails or other local issues
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
                 exit;
             }
@@ -314,12 +320,15 @@ class GraphComponent extends Component {
      */
     public function startup(Event $event) {
 
+        if (isset($this->request->data['signed_request'])) {
+            $this->Controller->log($this->request->data['signed_request']);
+        }
+
         /**
          * Checks if user is trying to authenticate by watching for what Facebook returns
          */
-        //debug($this->Controller->request->query('code'));
+//debug($this->Controller->request->query('code'));
         if ($this->Controller->request->query('code')) {
-            //debug($this->Controller->request);die;
             /**
              * Queries database for existing Facebook Id
              */
@@ -337,6 +346,9 @@ class GraphComponent extends Component {
                     $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
                     $this->Controller->redirect($this->Controller->referer());
                 } else {
+                    if(empty($existing_user['email']) && !empty($this->FacebookEmail)){
+                        $this->__updateAccount($queryFacebookId, ['email' => $this->FacebookEmail]);
+                    }
                     $this->Auth->setUser($existing_user);
                     $this->Controller->redirect($this->Controller->referer());
                 }
@@ -354,7 +366,7 @@ class GraphComponent extends Component {
                     if ($this->Auth->user() && $this->Auth->user('email') != $queryFacebookEmail['email']) {
                         $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
                     } else {
-                        $this->__updateAccount($queryFacebookEmail);
+                        $this->__updateAccount($queryFacebookEmail, ['facebook_id' => $this->FacebookId]);
                     }
                 } else {
                     /**
@@ -362,7 +374,7 @@ class GraphComponent extends Component {
                      */
                     if ($this->Auth->user()) {
                         $user = $this->Users->get($this->Auth->user('id'));
-                        $this->__updateAccount($user);
+                        $this->__updateAccount($user, ['facebook_id' => $this->FacebookId]);
                     } else {
                         /**
                          * If FacebookUserId and FacebookUserEmail is not in database, create new account
@@ -383,7 +395,7 @@ class GraphComponent extends Component {
         /**
          * Sets/Configures fb_login_url to be assigned in Facebook Login Button
          */
-        $loginUrl = $this->FacebookHelper->getLoginUrl('http://www.kurti.life/login', $this->_configs['permissions']);
+        $loginUrl = $this->FacebookHelper->getLoginUrl('https://www.kurti.life/login', $this->_configs['permissions']);
 
         $this->Controller->set('fb_login_url', $loginUrl);
         Configure::write('fb_login_url', $loginUrl);
@@ -397,24 +409,128 @@ class GraphComponent extends Component {
      * @return type Array $friends
      */
     public function getFriends($rand = false, $options = []) {
-        $fields = isset($options['fields']) ? $options['fields'] : 'name,picture.width(300).height(300)';
-        $limit = isset($options['limit']) ? $options['limit'] : 100;
+        $fields = isset($options['fields']) ? $options['fields'] : 'name,picture.width(300).height(300),first_name,last_name,id,gender';
+        $limit = isset($options['limit']) ? $options['limit'] : 1000;
 
         $this->FacebookRequestFriends = $this->Facebook->get("/me/taggable_friends?fields=$fields&limit=$limit");
+        //$this->Controller->log($this->FacebookRequestFriends);
         $friends = $this->FacebookRequestFriends->getGraphEdge()->asArray();
-
+        
         if ($rand) {
             return $friends[array_rand($friends)];
         }
+
         return $friends;
+    }
+
+    public function getFriend($uid = '') {
+        $this->FacebookFriend = $this->Facebook->get('me/friends?uid=' . $uid.'&fields=gender,name,picture.width(300).height(300),first_name,last_name,id');
+        return $this->FacebookFriend->getGraphEdge()->asArray();
+    }
+
+    /**
+     * Get list of user defined family based on user_permissionns
+     * 
+     * @return type Array $family
+     */
+    public function getFamily() {
+        return $this->getMe('family');
+    }
+
+    public function getUserPhotos() {
+        return $this->getMe('photos');
+    }
+
+    public function getUser($uid) {
+        $this->MeEndpoint = $this->Facebook->get($uid . '?fields=picture.height(320).width(320),name,first_name,last_name');
+        return $this->MeEndpoint->getGraphObject()->asArray();
+    }
+
+    public function getMe($endpoint = '', $fields = '') {
+        if (!empty($fields)) {
+            $fields = '?fields=' . $fields;
+        }
+        $this->Me = $this->Facebook->get('me/' . $endpoint . $fields);
+        return $this->Me->getGraphEdge()->asArray();
+    }
+
+    /**
+     * 
+     * @param type $allPosts
+     * @param type $options Array
+     *      - ['type' => 'posts|tagged']
+     * @return type
+     */
+    public function getUsersFeed($allPosts = true, $options = []) {
+        if ($allPosts || empty($options)) {
+            $feed_type = 'feed';
+        } else {
+            switch ($options['type']) {
+                case 'posts':
+                    $feed_type = 'posts';
+                    break;
+                case 'tagged':
+                    $feed_type = 'tagged';
+                    break;
+                default:
+                    $feed_type = 'feed';
+                    break;
+            }
+        }
+
+        return $this->getMe($feed_type);
+    }
+
+    /**
+     * getUserPlubicProfile
+     * 
+     * @param type $fields CSV (Comma separate value for public profile)
+     * @return type
+     */
+    public function getUserPublicProfile($fields = '') {
+        if (empty($fields)) {
+            $this->FacebookUserProfile = $this->Facebook->get('me?fields=name,first_name,last_name,email,gender,age_range,birthday,favorite_athletes,favorite_teams,hometown,location,relationship_status,significant_other');
+        } else {
+            $this->FacebookUserProfile = $this->Facebook->get('me?fields=' . $fields);
+        }
+        return $this->FacebookUserProfile->getGraphObject()->asArray();
+    }
+
+    /**
+     * 
+     * @param type $redirect
+     * @param type $options
+     * @return type GraphUser
+     */
+    public function getProfilePicture($redirect = false, $options = []) {
+        $height = isset($options['height']) ? $options['height'] : 300;
+        $width = isset($options['width']) ? $options['width'] : 300;
+
+        $this->FacebookProfilePicture = $this->Facebook->get("/me/picture?redirect=$redirect&height=$height&width=$width");
+
+        return $this->FacebookProfilePicture->getGraphUser()->asArray();
+    }
+
+    public function postMessageToUserTimeline($data = '') {
+
+        $this->FacebookRequest = $this->Facebook->post('/me/feed', $data);
+
+        return $this->FacebookRequest->getGraphNode()->asArray();
+    }
+
+    public function postPhotoToUserTimeline($data = '') {
+
+        $this->FacebookRequest = $this->Facebook->post('/me/photos', $data);
+
+        return $this->FacebookRequest->getGraphNode()->asArray();
     }
 
     /**
      * Add facebook_id to existing user based on their email
      * @param type $user
      */
-    protected function __updateAccount($user) {
-        $this->Users->patchEntity($user, ['facebook_id' => $this->FacebookId]);
+    protected function __updateAccount($user, $data) {
+        $this->Users->patchEntity($user, $data);
         if ($result = $this->Users->save($user)) {
             $this->__autoLogin($result);
         }
