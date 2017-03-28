@@ -217,9 +217,21 @@ Default Options
 `<?php echo $this->Facebook->page($options = []); ?>`
 ````
 
-#### Coming Soon
+## Events #######################################################
 
-- Feed Dialog
+To allow for better integration with this plugin the following 3 events are available:
+
+##### `Model.Users.afterFacebookCreate`
+
+This event is fired as soon as a new user is created thru Facebook Login
+
+##### `Model.Users.afterFacebookUpdate`
+
+This event is fired as soon as Facebook Login is added to an existing user
+
+##### `Model.Users.afterFacebookLogin`
+
+This event is fired after the request is sent to have the newly created/updated user autoLogged in.
 
 ## Disclaimer
 Although we have done many tests to ensure this plugin works as intended, we advise you to use it at your own risk. As with anything else, you should first test any addition to your application in a test environment. Please provide any fixes or enhancements via issue or pull request.
