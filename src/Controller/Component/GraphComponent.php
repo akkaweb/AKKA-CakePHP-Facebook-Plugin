@@ -531,7 +531,12 @@ class GraphComponent extends Component {
      */
     protected function __updateAccount($user, $data) {
         $this->Users->patchEntity($user, $data);
+        
         if ($result = $this->Users->save($user)) {
+            
+            $event = new Event('Model.Users.afterFacebookUpdate', $this, ['user' => $user]);
+            $this->eventManager()->dispatch($event);
+            
             $this->__autoLogin($result);
         }
     }
@@ -551,7 +556,11 @@ class GraphComponent extends Component {
 
         $user = $this->Users->newEntity($data);
 
-        if ($result = $this->Users->save($user)) {
+        if ($result = $this->Users->save($user)) {            
+            
+            $event = new Event('Model.Users.afterFacebookCreate', $this, ['user' => $user]);
+            $this->eventManager()->dispatch($event);
+            
             $this->__autoLogin($result);
         }
     }
@@ -562,9 +571,13 @@ class GraphComponent extends Component {
      * @param type $result
      */
     protected function __autoLogin($result) {
-        $authUser = $this->Users->get($result->id)->toArray();
+        $user = $this->Users->get($result->id)->toArray();
 
-        $this->Auth->setUser($authUser);
+        $this->Auth->setUser($user);
+                    
+        $event = new Event('Model.Users.afterFacebookLogin', $this, ['user' => $user]);
+        $this->eventManager()->dispatch($event);
+                
         $this->Controller->redirect($this->Controller->referer());
     }
 
