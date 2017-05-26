@@ -65,7 +65,7 @@ Note: if `composer.phar` is not found, you need to install it. Follow CakePHP's 
 1. Load the plugin in your application's `bootstrap.php` file:
 
 ```php
-Plugin::load('Akkaweb\Facebook', ['bootstrap' => false, 'routes' => true]);
+Plugin::load('Akkaweb/Facebook', ['bootstrap' => false, 'routes' => true]);
 ```
 
 2. Load the plugin's component in `AppController.php` 
