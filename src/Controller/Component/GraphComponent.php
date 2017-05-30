@@ -217,7 +217,7 @@ class GraphComponent extends Component {
          */
         /*if ($this->isSessionStarted() === FALSE) {
             $this->Session->start();
-        */}
+        }*/
 
         /**
          * Attach Facebook Graph Helper
