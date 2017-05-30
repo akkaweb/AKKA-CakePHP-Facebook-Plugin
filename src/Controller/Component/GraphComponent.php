@@ -201,7 +201,7 @@ class GraphComponent extends Component {
          */
         $this->Controller = $this->_registry->getController();
         
-        if(!isset($this->_configs['fb_url']){        
+        if(!isset($this->_configs['fb_url'])){        
             $this->_configs['fb_url'] = $this->Controller->request->here();
         }
 
