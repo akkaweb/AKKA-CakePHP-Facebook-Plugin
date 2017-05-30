@@ -200,6 +200,10 @@ class GraphComponent extends Component {
          * Get current controller
          */
         $this->Controller = $this->_registry->getController();
+        
+        if(!isset($this->_configs['fb_url']){        
+            $this->_configs['fb_url'] = $this->Controller->request->here();
+        }
 
         /**
          * Get session
@@ -395,7 +399,7 @@ class GraphComponent extends Component {
         /**
          * Sets/Configures fb_login_url to be assigned in Facebook Login Button
          */
-        $loginUrl = $this->FacebookHelper->getLoginUrl('https://www.kurti.life/login', $this->_configs['permissions']);
+        $loginUrl = $this->FacebookHelper->getLoginUrl($this->_configs['fb_url'], $this->_configs['permissions']);
 
         $this->Controller->set('fb_login_url', $loginUrl);
         Configure::write('fb_login_url', $loginUrl);
