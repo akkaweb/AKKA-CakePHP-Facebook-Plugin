@@ -215,9 +215,9 @@ class GraphComponent extends Component {
         /**
          * Start session if not already started
          */
-        if ($this->isSessionStarted() === FALSE) {
+        /*if ($this->isSessionStarted() === FALSE) {
             $this->Session->start();
-        }
+        */}
 
         /**
          * Attach Facebook Graph Helper
@@ -333,12 +333,14 @@ class GraphComponent extends Component {
          */
 //debug($this->Controller->request->query('code'));
         if ($this->Controller->request->query('code')) {
+            // Destroys invalid session to prevent a new session from being started
+            $this->Session->destroy();
             /**
              * Queries database for existing Facebook Id
              */
             $queryFacebookId = $this->Users->find('all')->where(['facebook_id' => $this->FacebookId])->first();
 
-
+            
 
             /**
              * Authenticates existing user into application
