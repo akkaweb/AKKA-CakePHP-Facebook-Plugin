@@ -27,8 +27,5 @@
 	    "Akkaweb\\Facebook\\Test\\": "tests",
 	    "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
 	}
-    },
-    "extra": {
-	"installer-name": "AkkaFacebook"
     }
 }
