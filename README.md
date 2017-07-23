@@ -1,4 +1,4 @@
-> This branch (Master) will be kept to support SDKv4. I am currently working on supporting Facebook SDKv5. Although it works, it is still going thru testing and at Beta. Go to the 'sdk5' branch for instructions on how to install and test.
+> IMPORTANT: SUPPORT FOR THIS BRANCH HAS BEEN DISCONTINUED. Use SDK5 Branch or latest tagged version. This branch (Master) will be kept to support Facebook SDKv4 but will not continue to be improved. I am currently working on supporting Facebook SDKv5. Follow installation instructions in that branch.
 
 # CakePHP 3 Facebook Plugin
 
@@ -49,6 +49,7 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 	"akkaweb/cakephp-facebook": "dev-master"
 }
 ```
+NOTE: Use instructions in SDK5 Branch if this is a new installation. This branch his no longer supported.
 
 2. Run the following at the root of your application
 
