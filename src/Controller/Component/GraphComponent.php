@@ -2,7 +2,7 @@
 
 /**
  * AkkaFacebook Graph Component
- * 
+ *
  * @author Andre Santiago
  * @copyright (c) 2015 akkaweb.com
  * @license MIT
@@ -44,56 +44,56 @@ class GraphComponent extends Component {
 
     /**
      * 	Facebook Redirect Login Helper
-     * 
+     *
      * @var type Object
      */
     public $FacebookHelper = null;
 
     /**
      * Facebook Access Token
-     * 
+     *
      * @var type String
      */
     public $FacebookAccessToken = null;
 
     /**
-     * Assigned Redirect Url 
-     * 
+     * Assigned Redirect Url
+     *
      * @var type String
      */
     public $FacebookRedirectUrl = null;
 
     /**
      * Facebook Request
-     * 
+     *
      * @var type Object
      */
     public $FacebookRequest = null;
 
     /**
      * Facebook Response
-     * 
+     *
      * @var type Object
      */
     public $FacebookResponse = null;
 
     /**
      * Facebook Graph Object
-     * 
+     *
      * @var type Object
      */
     public $FacebookGraphObject = null;
 
     /**
      * Facebook Graph User
-     * 
+     *
      * @var type Object
      */
     public $FacebookGraphUser = null;
 
     /**
      * Facebook Session
-     * 
+     *
      * @var type Object
      */
     public $Session = null;
@@ -101,63 +101,63 @@ class GraphComponent extends Component {
 
     /**
      * Facebook User Full Name
-     * 
+     *
      * @var type String
      */
     public $FacebookName = null;
 
     /**
      * Facebook User First Name
-     * 
+     *
      * @var type String
      */
     public $FacebookFirstName = null;
 
     /**
      * Facebook User Last Name
-     * 
+     *
      * @var type String
      */
     public $FacebookLastName = null;
 
     /**
      * Facebook User Id
-     * 
+     *
      * @var type String
      */
     public $FacebookId = null;
 
     /**
      * Facebook User Email
-     * 
+     *
      * @var type String
      */
     public $FacebookEmail = null;
 
     /**
      * Component Configuration
-     * 
+     *
      * @var type Array
      */
     protected $_configs = null;
 
     /**
      * Application Users Model Object
-     * 
+     *
      * @var type Object
      */
     protected $Users = null;
 
     /**
      * Components Controller
-     * 
+     *
      * @var type Object
      */
     protected $Controller = null;
 
     /**
      * Application Components
-     * 
+     *
      * @var type Component
      */
     public $components = ['Flash', 'Auth'];
@@ -186,7 +186,7 @@ class GraphComponent extends Component {
 
     /**
      * Initialize Controllers, User Model and Session
-     * 
+     *
      * @param array $config
      */
     public function initialize(array $config) {
@@ -200,9 +200,9 @@ class GraphComponent extends Component {
          * Get current controller
          */
         $this->Controller = $this->_registry->getController();
-        
-        if(!isset($this->_configs['fb_url'])){        
-            $this->_configs['fb_url'] = $this->Controller->request->scheme()."://".$this->Controller->request->host().$this->Controller->request->here();
+
+        if (!isset($this->_configs['fb_url'])) {
+            $this->_configs['fb_url'] = $this->Controller->request->scheme() . "://" . $this->Controller->request->host() . $this->Controller->request->here();
         }
 
         /**
@@ -241,7 +241,7 @@ class GraphComponent extends Component {
 
     /**
      * Initialize Facebook, create Session, fire Request and get User Object
-     * 
+     *
      * @param \Cake\Event\Event $event
      */
     public function beforeFilter(Event $event) {
@@ -286,7 +286,6 @@ class GraphComponent extends Component {
             $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($this->FacebookAccessToken);
             $this->Session->write('facebook_access_token', (string) $longLivedAccessToken);
             $this->Facebook->setDefaultAccessToken($this->Session->read('facebook_access_token'));
-
 // getting basic info about user
             try {
                 $this->FacebookRequest = $this->Facebook->get('/me?fields=name,first_name,last_name,email');
@@ -300,6 +299,10 @@ class GraphComponent extends Component {
                 $this->FacebookLastName = $this->GraphUser->getLastName();
                 $this->FacebookEmail = $this->GraphUser->getEmail();
                 $this->FacebookId = $this->GraphUser->getId();
+
+                if (isset($this->_configs['user_columns']['photo'])) {
+                    $this->FacebookProfilePic = $this->getProfilePicture();
+                }
 
 //Configure::write('fb_profile', $this->GraphUser);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -319,7 +322,7 @@ class GraphComponent extends Component {
 
     /**
      *  Component Startup
-     * 
+     *
      * @param \Cake\Event\Event $event
      */
     public function startup(Event $event) {
@@ -340,21 +343,25 @@ class GraphComponent extends Component {
              */
             $queryFacebookId = $this->Users->find('all')->where(['facebook_id' => $this->FacebookId])->first();
 
-            
-
             /**
              * Authenticates existing user into application
              */
             if ($queryFacebookId) {
 
                 $existing_user = $queryFacebookId->toArray();
+
                 if ($this->Auth->user() && $this->Auth->user('facebook_id') != $existing_user['facebook_id']) {
                     $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
                     $this->Controller->redirect($this->Controller->referer());
                 } else {
-                    if(empty($existing_user['email']) && !empty($this->FacebookEmail)){
-                        $this->__updateAccount($queryFacebookId, ['email' => $this->FacebookEmail]);
+                    if (empty($existing_user['email']) && !empty($this->FacebookEmail)) {
+                        $this->__updateAccount($queryFacebookId, ['email' => $this->FacebookEmail,]);
                     }
+
+                    if (isset($this->FacebookProfilePic)) {
+                        $this->__updateAccount($queryFacebookId);
+                    }
+
                     $this->Auth->setUser($existing_user);
                     $this->Controller->redirect($this->Controller->referer());
                 }
@@ -393,8 +400,8 @@ class GraphComponent extends Component {
     }
 
     /**
-     *  Component Before Render 
-     * 
+     *  Component Before Render
+     *
      * @param \Cake\Event\Event $event
      */
     public function beforeRender(Event $event) {
@@ -409,7 +416,7 @@ class GraphComponent extends Component {
 
     /**
      * Get list of logged User's friends
-     * 
+     *
      * @param type Boolean $rand
      * @param type Array $options
      * @return type Array $friends
@@ -421,7 +428,7 @@ class GraphComponent extends Component {
         $this->FacebookRequestFriends = $this->Facebook->get("/me/taggable_friends?fields=$fields&limit=$limit");
         //$this->Controller->log($this->FacebookRequestFriends);
         $friends = $this->FacebookRequestFriends->getGraphEdge()->asArray();
-        
+
         if ($rand) {
             return $friends[array_rand($friends)];
         }
@@ -430,13 +437,13 @@ class GraphComponent extends Component {
     }
 
     public function getFriend($uid = '') {
-        $this->FacebookFriend = $this->Facebook->get('me/friends?uid=' . $uid.'&fields=gender,name,picture.width(300).height(300),first_name,last_name,id');
+        $this->FacebookFriend = $this->Facebook->get('me/friends?uid=' . $uid . '&fields=gender,name,picture.width(300).height(300),first_name,last_name,id');
         return $this->FacebookFriend->getGraphEdge()->asArray();
     }
 
     /**
      * Get list of user defined family based on user_permissionns
-     * 
+     *
      * @return type Array $family
      */
     public function getFamily() {
@@ -461,7 +468,7 @@ class GraphComponent extends Component {
     }
 
     /**
-     * 
+     *
      * @param type $allPosts
      * @param type $options Array
      *      - ['type' => 'posts|tagged']
@@ -489,7 +496,7 @@ class GraphComponent extends Component {
 
     /**
      * getUserPlubicProfile
-     * 
+     *
      * @param type $fields CSV (Comma separate value for public profile)
      * @return type
      */
@@ -503,7 +510,7 @@ class GraphComponent extends Component {
     }
 
     /**
-     * 
+     *
      * @param type $redirect
      * @param type $options
      * @return type GraphUser
@@ -514,7 +521,9 @@ class GraphComponent extends Component {
 
         $this->FacebookProfilePicture = $this->Facebook->get("/me/picture?redirect=$redirect&height=$height&width=$width");
 
-        return $this->FacebookProfilePicture->getGraphUser()->asArray();
+        $profilePicture = $this->FacebookProfilePicture->getGraphUser()->asArray();
+
+        return $profilePicture['url'];
     }
 
     public function postMessageToUserTimeline($data = '') {
@@ -535,7 +544,12 @@ class GraphComponent extends Component {
      * Add facebook_id to existing user based on their email
      * @param type $user
      */
-    protected function __updateAccount($user, $data) {
+    protected function __updateAccount($user, $data = []) {
+
+        if (isset($this->FacebookProfilePic)) {
+            $data[$this->_configs['user_columns']['photo']] = $this->FacebookProfilePic;
+        }
+
         $this->Users->patchEntity($user, $data);
         if ($result = $this->Users->save($user)) {
             $this->__autoLogin($result);
@@ -555,6 +569,10 @@ class GraphComponent extends Component {
             'email' => $this->FacebookEmail
         ];
 
+        if (isset($this->FacebookProfilePic)) {
+            $data[$this->_configs['user_columns']['photo']] = $this->FacebookProfilePic;
+        }
+
         $user = $this->Users->newEntity($data);
 
         if ($result = $this->Users->save($user)) {
@@ -564,7 +582,7 @@ class GraphComponent extends Component {
 
     /**
      * Logs user in application after successful save
-     * 
+     *
      * @param type $result
      */
     protected function __autoLogin($result) {
@@ -576,7 +594,7 @@ class GraphComponent extends Component {
 
     /**
      * Creates a new username
-     * 
+     *
      * @return type String
      */
     protected function __generateUsername() {
@@ -591,7 +609,7 @@ class GraphComponent extends Component {
 
     /**
      * Generate a random password
-     * 
+     *
      * @return type String
      */
     protected function __randomPassword() {
@@ -602,7 +620,7 @@ class GraphComponent extends Component {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
-        return implode($pass); //turn the array into a string        
+        return implode($pass); //turn the array into a string
     }
 
     /**
