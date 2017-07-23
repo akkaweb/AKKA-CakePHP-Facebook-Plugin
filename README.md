@@ -45,11 +45,13 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 1. Add the following to your `composer.json` located in the root of your application, in the `require` section . ie. `/var/www/domain.com/composer.json`
 
 ```php
+// NOTE: Use instructions in SDK5 Branch if this is a new installation. This branch his no longer supported.
+
 "require": {
 	"akkaweb/cakephp-facebook": "dev-master"
 }
 ```
-NOTE: Use instructions in SDK5 Branch if this is a new installation. This branch his no longer supported.
+
 
 2. Run the following at the root of your application
 
