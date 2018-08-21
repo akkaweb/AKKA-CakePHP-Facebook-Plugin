@@ -194,7 +194,7 @@ class GraphComponent extends Component {
         /**
          * Assigned merge configuration
          */
-        $this->_configs = $this->config();
+        $this->_configs = $this->getConfig();
 
         /**
          * Get current controller
@@ -210,8 +210,6 @@ class GraphComponent extends Component {
          */
         $this->Session = $this->Controller->request->session();
 
-
-//debug($this->Controller->request);
         /**
          * Start session if not already started
          */
@@ -255,7 +253,7 @@ class GraphComponent extends Component {
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
 
-        $this->Session->write('FBRLH_state', $this->request->data('state'));
+        $this->Session->write('FBRLH_state', $this->request->getData('state'));
 
         if (isset($_GET['state'])) {
             $_SESSION['FBRLH_state'] = $_GET['state'];
@@ -327,15 +325,14 @@ class GraphComponent extends Component {
      */
     public function startup(Event $event) {
 
-        if (isset($this->request->data['signed_request'])) {
-            $this->Controller->log($this->request->data['signed_request']);
+        if ($this->request->getData('signed_request') !== null) {
+            $this->Controller->log($this->request->getData('signed_request'));
         }
 
         /**
          * Checks if user is trying to authenticate by watching for what Facebook returns
          */
-//debug($this->Controller->request->query('code'));
-        if ($this->Controller->request->query('code')) {
+        if ($this->Controller->request->getQuery('code')) {
             // Destroys invalid session to prevent a new session from being started
             $this->Session->destroy();
             /**

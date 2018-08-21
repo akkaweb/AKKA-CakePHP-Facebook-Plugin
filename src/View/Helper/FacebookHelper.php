@@ -42,7 +42,7 @@ class FacebookHelper extends Helper
     public function __construct(View $view, $config = [])
     {
         parent::__construct($view, $config);
-        $this->_configs = $this->config();
+        $this->_configs = $this->getConfig();
         $this->appId = $this->_configs['app_id'];
         $this->redirectUrl = $this->_configs['redirect_url'];
         $this->appScope = $this->_configs['app_scope'];
