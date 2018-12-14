@@ -1,4 +1,5 @@
-> IMPORTANT: SUPPORT FOR THIS BRANCH HAS BEEN DISCONTINUED. Use SDK5 Branch or latest tagged version. This branch (Master) will be kept to support Facebook SDKv4 but will not continue to be improved. I am currently working on supporting Facebook SDKv5. Follow installation instructions in that branch.
+> IMPORTANT:
+> Support for Facebook SDKv5
 
 # CakePHP 3 Facebook Plugin
 
@@ -8,10 +9,11 @@ A CakePHP 3.x Plugin to allow Facebook Login into an application.
 [![License](https://poser.pugx.org/akkaweb/cakephp-facebook/license.svg)](https://packagist.org/packages/akkaweb/cakephp-facebook)
 [![Gitter](https://badges.gitter.im/akkaweb/AKKA-CakePHP-Facebook-Plugin.svg)](https://gitter.im/akkaweb/AKKA-CakePHP-Facebook-Plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## Requirements #######################################################
+## Requirements 
+
 - CakePHP 3.x with Auth component correctly setup. Refer to http://book.cakephp.org/3.0/en/controllers/components/authentication.html for setup
-- PHP 5.4.6+
-- Facebook PHP SDK 4.0+
+- PHP 5.6+
+- Facebook PHP SDK 5.0+
 - Users Table with at least the following columns
     * `facebook_id varchar(20)`
     * `first_name` // can be set in config
@@ -23,7 +25,8 @@ For existing applications that already have a `first_name`, `last_name`, `userna
 
 NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Facebook for you if not already installed. If manual download is chosen, you must download the Facebook Source into `vendor/facebook/php-sdk-v4` and make sure it can be loaded by the composer. Else you need to manually include FAcebook's `autoload.php` file in your application's `bootstrap.php`.
 
-## Included #######################################################
+## Included 
+
 - Facebook Graph Component
 - Facebook Graph Helper
 	- $this->Facebook->loginLink()
@@ -38,43 +41,23 @@ NOTE: Facebook PHP SDK is a requirement. Composer will automatically install Fac
 	
 ***** See below for more details on how to use each
 
-## Installation #######################################################
+## Installation 
 
 ##### Composer (Best Choice)
 
-1. Add the following to your `composer.json` located in the root of your application, in the `require` section . ie. `/var/www/domain.com/composer.json`
+1. Run the following command to install the latest tagged version of AKKAweb's CakePHP Facebook Plugin
 
 ```php
-// NOTE: Use instructions in SDK5 Branch if this is a new installation. This branch his no longer supported.
-
-"require": {
-	"akkaweb/cakephp-facebook": "dev-master"
-}
+composer require akkaweb/cakephp-facebook
 ```
 
 
-2. Run the following at the root of your application
-
-```
-sudo php composer.phar update
-```
-Note: if `composer.phar` is not found, you need to install it. Follow CakePHP's documentation here -> http://book.cakephp.org/3.0/en/installation.html. Refer to Installing Cakephp section
-
-##### Git Clone (plugins/AkkaFacebook)
-`git clone git@github.com:akkaweb/AKKA-CakePHP-Facebook-Plugin.git`
-
-##### Download
-`https://github.com/akkaweb/AKKA-CakePHP-Facebook-Plugin/archive/master.zip`
-
-Note: When installing with either manual download or Git Clone and CakePHP complains it cannot find the plugin, you need to add the plugin to `vendor/cakephp-plugins.php` in the `plugins` array [] --> `'AkkaFacebook' => $baseDir . '/plugins/AkkaFacebook/'`. If you are using composer, running `php composer.phar dumpautoload` could be sufficient. If it does not work add the following to the `"autoload"` section in the root application's `composer.json` file in the `"psr-4":` section: `"AkkaFacebook\\": "./plugins/AkkaFacebook/src"`
-
-
-## Configuration #######################################################
+## Configuration 
 
 1. Load the plugin in your application's `bootstrap.php` file:
 
 ```php
-Plugin::load('AkkaFacebook', ['bootstrap' => false, 'routes' => true]);
+Plugin::load('Akkaweb/Facebook', ['bootstrap' => false, 'routes' => true]);
 ```
 
 2. Load the plugin's component in `AppController.php` 
@@ -87,7 +70,7 @@ Note: You need to obtain your facebook `App Id` and `App Secret` from http://dev
 public function initialize(){
     parent::initialize();
     
-    $this->loadComponent('AkkaFacebook.Graph', [
+    $this->loadComponent('Akkaweb\Facebook.Graph', [
 	    'app_id' => 'your-fb-app-id',
 	    'app_secret' => 'your-fb-app-secret',
 	    'app_scope' => 'email,public_profile', // https://developers.facebook.com/docs/facebook-login/permissions/v2.4
@@ -98,13 +81,9 @@ public function initialize(){
 }
 ```
 
-## Usage #######################################################
+## Usage 
 
 Note: FacebookHelper is automatically loaded by the `Graph Component`. If that is not desired, add `'enable_graph_helper' => false,` to `$this->loadComponent()` above.
-
-##### Helper Template File Setup
-
-- Add `<?php echo $this->Facebook->initJsSDK(); ?>` immediately after the opening `<body>` tag
 
 ##### Login Link (Customizable Facebook link <a href)
 
@@ -230,9 +209,22 @@ Default Options
 `<?php echo $this->Facebook->page($options = []); ?>`
 ````
 
-#### Coming Soon
+## Events 
 
-- Feed Dialog
+To allow for better integration with this plugin the following 3 events are available:
+
+##### `Model.Users.afterFacebookCreate`
+
+This event is fired as soon as a new user is created thru Facebook Login
+
+##### `Model.Users.afterFacebookUpdate`
+
+This event is fired as soon as Facebook Login is added to an existing user
+
+##### `Model.Users.afterFacebookLogin`
+
+This event is fired after the request is sent to have the newly created/updated user autoLogged in.
 
 ## Disclaimer
 Although we have done many tests to ensure this plugin works as intended, we advise you to use it at your own risk. As with anything else, you should first test any addition to your application in a test environment. Please provide any fixes or enhancements via issue or pull request.
+

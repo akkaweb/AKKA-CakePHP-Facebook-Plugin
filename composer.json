@@ -1,6 +1,6 @@
 {
     "name": "akkaweb/cakephp-facebook",
-    "description": "CakePHP 3 Facebook Plugin",
+    "description": "CakePHP 3 Facebook Plugin - Facebook SDKv5",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "cakephp3", "facebook"],
     "license": "MIT",
@@ -12,23 +12,20 @@
     ],
     "require": {
 	"php": ">=5.4",
-	"facebook/php-sdk-v4": "4.0.*"
+	"facebook/graph-sdk": "^5.0"
     },
     "require-dev": {
 	"phpunit/phpunit": "*"
     },
     "autoload": {
 	"psr-4": {
-	    "AkkaFacebook\\": "src"
+	    "Akkaweb\\Facebook\\": "src"
 	}
     },
     "autoload-dev": {
 	"psr-4": {
-	    "AkkaFacebook\\Test\\": "tests",
+	    "Akkaweb\\Facebook\\Test\\": "tests",
 	    "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
 	}
-    },
-    "extra": {
-	"installer-name": "AkkaFacebook"
     }
 }
