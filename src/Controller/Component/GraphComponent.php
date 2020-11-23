@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AkkaFacebook Graph Component
+ * AkkaFacebook Graph Component.
  *
  * @author Andre Santiago
  * @copyright (c) 2015 akkaweb.com
@@ -11,88 +11,78 @@
 namespace Akkaweb\Facebook\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
 use Facebook\FacebookSession;
-use Facebook\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
 use Facebook\GraphUser;
-use Facebook\FacebookSDKException;
-use Facebook\FacebookRequestException;
-use Facebook\FacebookAuthorizationException;
 
 /**
- * Graph component
+ * Graph component.
  */
-class GraphComponent extends Component {
-
+class GraphComponent extends Component
+{
     /**
-     *
      * @var type Facebook
      */
     public $Facebook = null;
 
     /**
-     *
      * @var type FacebookProfilePicture
      */
     public $FacebookProfilePicture = null;
 
     /**
-     * 	Facebook Redirect Login Helper
+     * 	Facebook Redirect Login Helper.
      *
      * @var type Object
      */
     public $FacebookHelper = null;
 
     /**
-     * Facebook Access Token
+     * Facebook Access Token.
      *
      * @var type String
      */
     public $FacebookAccessToken = null;
 
     /**
-     * Assigned Redirect Url
+     * Assigned Redirect Url.
      *
      * @var type String
      */
     public $FacebookRedirectUrl = null;
 
     /**
-     * Facebook Request
+     * Facebook Request.
      *
      * @var type Object
      */
     public $FacebookRequest = null;
 
     /**
-     * Facebook Response
+     * Facebook Response.
      *
      * @var type Object
      */
     public $FacebookResponse = null;
 
     /**
-     * Facebook Graph Object
+     * Facebook Graph Object.
      *
      * @var type Object
      */
     public $FacebookGraphObject = null;
 
     /**
-     * Facebook Graph User
+     * Facebook Graph User.
      *
      * @var type Object
      */
     public $FacebookGraphUser = null;
 
     /**
-     * Facebook Session
+     * Facebook Session.
      *
      * @var type Object
      */
@@ -100,63 +90,63 @@ class GraphComponent extends Component {
     public $GraphUser = null;
 
     /**
-     * Facebook User Full Name
+     * Facebook User Full Name.
      *
      * @var type String
      */
     public $FacebookName = null;
 
     /**
-     * Facebook User First Name
+     * Facebook User First Name.
      *
      * @var type String
      */
     public $FacebookFirstName = null;
 
     /**
-     * Facebook User Last Name
+     * Facebook User Last Name.
      *
      * @var type String
      */
     public $FacebookLastName = null;
 
     /**
-     * Facebook User Id
+     * Facebook User Id.
      *
      * @var type String
      */
     public $FacebookId = null;
 
     /**
-     * Facebook User Email
+     * Facebook User Email.
      *
      * @var type String
      */
     public $FacebookEmail = null;
 
     /**
-     * Component Configuration
+     * Component Configuration.
      *
      * @var type Array
      */
     protected $_configs = null;
 
     /**
-     * Application Users Model Object
+     * Application Users Model Object.
      *
      * @var type Object
      */
     protected $Users = null;
 
     /**
-     * Components Controller
+     * Components Controller.
      *
      * @var type Object
      */
     protected $Controller = null;
 
     /**
-     * Application Components
+     * Application Components.
      *
      * @var type Component
      */
@@ -180,59 +170,57 @@ class GraphComponent extends Component {
             'first_name' => 'first_name',
             'last_name' => 'last_name',
             'password' => 'password',
-            'username' => 'username'
-        ]
+            'username' => 'username',
+        ],
     ];
 
     /**
-     * Initialize Controllers, User Model and Session
-     *
-     * @param array $config
+     * Initialize Controllers, User Model and Session.
      */
-    public function initialize(array $config) {
+    public function initialize(array $config): void
+    {
         parent::initialize($config);
-        /**
+        /*
          * Assigned merge configuration
          */
-        $this->_configs = $this->config();
+        $this->_configs = $this->getConfig();
 
-        /**
+        /*
          * Get current controller
          */
-        $this->Controller = $this->_registry->getController();
+        $this->Controller = $this->getController();
 
         if (!isset($this->_configs['fb_url'])) {
-            $this->_configs['fb_url'] = $this->Controller->request->scheme() . "://" . $this->Controller->request->host() . $this->Controller->request->here();
+            $this->_configs['fb_url'] = $this->Controller->getRequest()->scheme().'://'.$this->Controller->getRequest()->host().$this->Controller->getRequest()->getUri()->getPath();
         }
 
-        /**
+        /*
          * Get session
          */
-        $this->Session = $this->Controller->request->session();
+        $this->Session = $this->Controller->getRequest()->getSession();
 
-
-//debug($this->Controller->request);
-        /**
+        //debug($this->Controller->request);
+        /*
          * Start session if not already started
          */
         if (!$this->Session->started()) {
             $this->Session->start();
         }
 
-        /**
+        /*
          * Attach Facebook Graph Helper
          */
         if ($this->_configs['enable_graph_helper']) {
-            $this->Controller->helpers = [
+            $this->Controller->viewBuilder()->setHelpers([
                 'Akkaweb/Facebook.Facebook' => [
                     'redirect_url' => $this->_configs['redirect_url'],
                     'app_id' => $this->_configs['app_id'],
-                    'app_scope' => $this->_configs['app_scope']
-                ]
-            ];
+                    'app_scope' => $this->_configs['app_scope'],
+                ],
+            ]);
         }
 
-        /**
+        /*
          * Initialize the Users Model class
          */
         $this->Users = TableRegistry::get($this->_configs['user_model']);
@@ -240,17 +228,16 @@ class GraphComponent extends Component {
     }
 
     /**
-     * Initialize Facebook, create Session, fire Request and get User Object
-     *
-     * @param \Cake\Event\Event $event
+     * Initialize Facebook, create Session, fire Request and get User Object.
      */
-    public function beforeFilter(Event $event) {
-//FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
+    public function beforeFilter(Event $event)
+    {
+        //FacebookSession::setDefaultApplication($this->_configs['app_id'], $this->_configs['app_secret']);
         $this->Facebook = new \Facebook\Facebook([
             'app_id' => $this->_configs['app_id'],
             'app_secret' => $this->_configs['app_secret'],
             'default_graph_version' => 'v2.8',
-            'persistent_data_handler' => 'session'
+            'persistent_data_handler' => 'session',
         ]);
 
         $this->FacebookRedirectUrl = $this->_configs['redirect_url'];
@@ -271,14 +258,12 @@ class GraphComponent extends Component {
                 $this->FacebookAccessToken = $this->FacebookHelper->getAccessToken();
             }
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            $this->log('Graph returned an error: ' . $e->getMessage());
+            $this->log('Graph returned an error: '.$e->getMessage());
             exit;
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            $this->log('Facebook SDK returned an error: ' . $e->getMessage());
+            $this->log('Facebook SDK returned an error: '.$e->getMessage());
             exit;
         }
-
-
 
         if (isset($this->FacebookAccessToken)) {
             $this->Session->write('facebook_access_token', (string) $this->FacebookAccessToken);
@@ -286,13 +271,13 @@ class GraphComponent extends Component {
             $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($this->FacebookAccessToken);
             $this->Session->write('facebook_access_token', (string) $longLivedAccessToken);
             $this->Facebook->setDefaultAccessToken($this->Session->read('facebook_access_token'));
-// getting basic info about user
+            // getting basic info about user
             try {
                 $this->FacebookRequest = $this->Facebook->get('/me?fields=name,first_name,last_name,email');
-//$this->FacebookRequestFriends = $this->Facebook->get('/me/taggable_friends?fields=name&limit=100');
+                //$this->FacebookRequestFriends = $this->Facebook->get('/me/taggable_friends?fields=name&limit=100');
 
                 $this->GraphUser = $this->FacebookRequest->getGraphUser();
-//$friends = $this->FacebookRequestFriends->getGraphEdge();
+                //$friends = $this->FacebookRequestFriends->getGraphEdge();
 
                 $this->FacebookName = $this->GraphUser->getName();
                 $this->FacebookFirstName = $this->GraphUser->getFirstName();
@@ -304,58 +289,55 @@ class GraphComponent extends Component {
                     $this->FacebookProfilePic = $this->getProfilePicture();
                 }
 
-//Configure::write('fb_profile', $this->GraphUser);
+                //Configure::write('fb_profile', $this->GraphUser);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
-// When Graph returns an error
-                echo 'Graph returned an error: ' . $e->getMessage();
+                // When Graph returns an error
+                echo 'Graph returned an error: '.$e->getMessage();
                 session_destroy();
-// redirecting user back to app login page
-                header("Location: ./");
+                // redirecting user back to app login page
+                header('Location: ./');
                 exit;
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
-// When validation fails or other local issues
-                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: '.$e->getMessage();
                 exit;
             }
         }
     }
 
     /**
-     *  Component Startup
-     *
-     * @param \Cake\Event\Event $event
+     *  Component Startup.
      */
-    public function startup(Event $event) {
-
+    public function startup(Event $event)
+    {
         if (isset($this->request->data['signed_request'])) {
             $this->Controller->log($this->request->data['signed_request']);
         }
 
-        /**
+        /*
          * Checks if user is trying to authenticate by watching for what Facebook returns
          */
-//debug($this->Controller->request->query('code'));
+        //debug($this->Controller->request->query('code'));
         if ($this->Controller->request->query('code')) {
             // Destroys invalid session to prevent a new session from being started
             $this->Session->destroy();
             /**
-             * Queries database for existing Facebook Id
+             * Queries database for existing Facebook Id.
              */
             $queryFacebookId = $this->Users->find('all')->where(['facebook_id' => $this->FacebookId])->first();
 
-            /**
+            /*
              * Authenticates existing user into application
              */
             if ($queryFacebookId) {
-
                 $existing_user = $queryFacebookId->toArray();
 
                 if ($this->Auth->user() && $this->Auth->user('facebook_id') != $existing_user['facebook_id']) {
-                    $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
+                    $this->Flash->warning('This Facebook account is already connected with another user. You can only have one account with Facebook');
                     $this->Controller->redirect($this->Controller->referer());
                 } else {
                     if (empty($existing_user['email']) && !empty($this->FacebookEmail)) {
-                        $this->__updateAccount($queryFacebookId, ['email' => $this->FacebookEmail,]);
+                        $this->__updateAccount($queryFacebookId, ['email' => $this->FacebookEmail]);
                     }
 
                     if (isset($this->FacebookProfilePic)) {
@@ -367,29 +349,28 @@ class GraphComponent extends Component {
                 }
             } else {
                 /**
-                 * Queries database for existing user based on Email
+                 * Queries database for existing user based on Email.
                  */
                 $queryFacebookEmail = $this->Users->find('all')->where(['email' => $this->FacebookEmail])->first();
 
-
-                /**
+                /*
                  * Updates user account by adding FacebookId to it and authenticates user
                  */
                 if ($queryFacebookEmail) {
                     if ($this->Auth->user() && $this->Auth->user('email') != $queryFacebookEmail['email']) {
-                        $this->Flash->warning("This Facebook account is already connected with another user. You can only have one account with Facebook");
+                        $this->Flash->warning('This Facebook account is already connected with another user. You can only have one account with Facebook');
                     } else {
                         $this->__updateAccount($queryFacebookEmail, ['facebook_id' => $this->FacebookId]);
                     }
                 } else {
-                    /**
+                    /*
                      * If user is already logged in... add to their logged in account
                      */
                     if ($this->Auth->user()) {
                         $user = $this->Users->get($this->Auth->user('id'));
                         $this->__updateAccount($user, ['facebook_id' => $this->FacebookId]);
                     } else {
-                        /**
+                        /*
                          * If FacebookUserId and FacebookUserEmail is not in database, create new account
                          */
                         $this->__newAccount();
@@ -400,13 +381,12 @@ class GraphComponent extends Component {
     }
 
     /**
-     *  Component Before Render
-     *
-     * @param \Cake\Event\Event $event
+     *  Component Before Render.
      */
-    public function beforeRender(Event $event) {
+    public function beforeRender(Event $event)
+    {
         /**
-         * Sets/Configures fb_login_url to be assigned in Facebook Login Button
+         * Sets/Configures fb_login_url to be assigned in Facebook Login Button.
          */
         $loginUrl = $this->FacebookHelper->getLoginUrl($this->_configs['fb_url'], $this->_configs['permissions']);
 
@@ -415,13 +395,15 @@ class GraphComponent extends Component {
     }
 
     /**
-     * Get list of logged User's friends
+     * Get list of logged User's friends.
      *
      * @param type Boolean $rand
-     * @param type Array $options
+     * @param type Array   $options
+     *
      * @return type Array $friends
      */
-    public function getFriends($rand = false, $options = []) {
+    public function getFriends($rand = false, $options = [])
+    {
         $fields = isset($options['fields']) ? $options['fields'] : 'name,picture.width(300).height(300),first_name,last_name,id,gender';
         $limit = isset($options['limit']) ? $options['limit'] : 1000;
 
@@ -436,45 +418,54 @@ class GraphComponent extends Component {
         return $friends;
     }
 
-    public function getFriend($uid = '') {
-        $this->FacebookFriend = $this->Facebook->get('me/friends?uid=' . $uid . '&fields=gender,name,picture.width(300).height(300),first_name,last_name,id');
+    public function getFriend($uid = '')
+    {
+        $this->FacebookFriend = $this->Facebook->get('me/friends?uid='.$uid.'&fields=gender,name,picture.width(300).height(300),first_name,last_name,id');
+
         return $this->FacebookFriend->getGraphEdge()->asArray();
     }
 
     /**
-     * Get list of user defined family based on user_permissionns
+     * Get list of user defined family based on user_permissionns.
      *
      * @return type Array $family
      */
-    public function getFamily() {
+    public function getFamily()
+    {
         return $this->getMe('family');
     }
 
-    public function getUserPhotos() {
+    public function getUserPhotos()
+    {
         return $this->getMe('photos');
     }
 
-    public function getUser($uid) {
-        $this->MeEndpoint = $this->Facebook->get($uid . '?fields=picture.height(320).width(320),name,first_name,last_name');
+    public function getUser($uid)
+    {
+        $this->MeEndpoint = $this->Facebook->get($uid.'?fields=picture.height(320).width(320),name,first_name,last_name');
+
         return $this->MeEndpoint->getGraphObject()->asArray();
     }
 
-    public function getMe($endpoint = '', $fields = '') {
+    public function getMe($endpoint = '', $fields = '')
+    {
         if (!empty($fields)) {
-            $fields = '?fields=' . $fields;
+            $fields = '?fields='.$fields;
         }
-        $this->Me = $this->Facebook->get('me/' . $endpoint . $fields);
+        $this->Me = $this->Facebook->get('me/'.$endpoint.$fields);
+
         return $this->Me->getGraphEdge()->asArray();
     }
 
     /**
-     *
      * @param type $allPosts
-     * @param type $options Array
-     *      - ['type' => 'posts|tagged']
+     * @param type $options  Array
+     *                       - ['type' => 'posts|tagged']
+     *
      * @return type
      */
-    public function getUsersFeed($allPosts = true, $options = []) {
+    public function getUsersFeed($allPosts = true, $options = [])
+    {
         if ($allPosts || empty($options)) {
             $feed_type = 'feed';
         } else {
@@ -495,27 +486,31 @@ class GraphComponent extends Component {
     }
 
     /**
-     * getUserPlubicProfile
+     * getUserPlubicProfile.
      *
      * @param type $fields CSV (Comma separate value for public profile)
+     *
      * @return type
      */
-    public function getUserPublicProfile($fields = '') {
+    public function getUserPublicProfile($fields = '')
+    {
         if (empty($fields)) {
             $this->FacebookUserProfile = $this->Facebook->get('me?fields=name,first_name,last_name,email,gender,age_range,birthday,favorite_athletes,favorite_teams,hometown,location,relationship_status,significant_other');
         } else {
-            $this->FacebookUserProfile = $this->Facebook->get('me?fields=' . $fields);
+            $this->FacebookUserProfile = $this->Facebook->get('me?fields='.$fields);
         }
+
         return $this->FacebookUserProfile->getGraphObject()->asArray();
     }
 
     /**
-     *
      * @param type $redirect
      * @param type $options
+     *
      * @return type GraphUser
      */
-    public function getProfilePicture($redirect = false, $options = []) {
+    public function getProfilePicture($redirect = false, $options = [])
+    {
         $height = isset($options['height']) ? $options['height'] : 300;
         $width = isset($options['width']) ? $options['width'] : 300;
 
@@ -526,26 +521,27 @@ class GraphComponent extends Component {
         return $profilePicture['url'];
     }
 
-    public function postMessageToUserTimeline($data = '') {
-
+    public function postMessageToUserTimeline($data = '')
+    {
         $this->FacebookRequest = $this->Facebook->post('/me/feed', $data);
 
         return $this->FacebookRequest->getGraphNode()->asArray();
     }
 
-    public function postPhotoToUserTimeline($data = '') {
-
+    public function postPhotoToUserTimeline($data = '')
+    {
         $this->FacebookRequest = $this->Facebook->post('/me/photos', $data);
 
         return $this->FacebookRequest->getGraphNode()->asArray();
     }
 
     /**
-     * Add facebook_id to existing user based on their email
+     * Add facebook_id to existing user based on their email.
+     *
      * @param type $user
      */
-    protected function __updateAccount($user, $data = []) {
-
+    protected function __updateAccount($user, $data = [])
+    {
         if (isset($this->FacebookProfilePic)) {
             $data[$this->_configs['user_columns']['photo']] = $this->FacebookProfilePic;
         }
@@ -557,16 +553,17 @@ class GraphComponent extends Component {
     }
 
     /**
-     * Create a new user using Facebook Credentials
+     * Create a new user using Facebook Credentials.
      */
-    protected function __newAccount() {
+    protected function __newAccount()
+    {
         $data = [
             $this->_configs['user_columns']['username'] => $this->__generateUsername(),
             $this->_configs['user_columns']['first_name'] => $this->FacebookFirstName,
             $this->_configs['user_columns']['last_name'] => $this->FacebookLastName,
             $this->_configs['user_columns']['password'] => $this->__randomPassword(),
             'facebook_id' => $this->FacebookId,
-            'email' => $this->FacebookEmail
+            'email' => $this->FacebookEmail,
         ];
 
         if (isset($this->FacebookProfilePic)) {
@@ -581,11 +578,12 @@ class GraphComponent extends Component {
     }
 
     /**
-     * Logs user in application after successful save
+     * Logs user in application after successful save.
      *
      * @param type $result
      */
-    protected function __autoLogin($result) {
+    protected function __autoLogin($result)
+    {
         $authUser = $this->Users->get($result->id)->toArray();
 
         $this->Auth->setUser($authUser);
@@ -593,48 +591,52 @@ class GraphComponent extends Component {
     }
 
     /**
-     * Creates a new username
+     * Creates a new username.
      *
      * @return type String
      */
-    protected function __generateUsername() {
-        $username = strtolower($this->FacebookFirstName . $this->FacebookLastName);
+    protected function __generateUsername()
+    {
+        $username = strtolower($this->FacebookFirstName.$this->FacebookLastName);
 
         while ($this->Users->find()->where([$this->_configs['user_columns']['username'] => $username])->first()) {
-            $username = $username . rand(0, 900);
+            $username = $username.rand(0, 900);
         }
 
         return $username;
     }
 
     /**
-     * Generate a random password
+     * Generate a random password.
      *
      * @return type String
      */
-    protected function __randomPassword() {
-        $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass = array(); //remember to declare $pass as an array
+    protected function __randomPassword()
+    {
+        $alphabet = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789';
+        $pass = []; //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 8; ++$i) {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
+
         return implode($pass); //turn the array into a string
     }
 
     /**
      * @return bool
      */
-    public function isSessionStarted() {
+    public function isSessionStarted()
+    {
         if (php_sapi_name() !== 'cli') {
             if (version_compare(phpversion(), '5.4.0', '>=')) {
-                return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+                return session_status() === PHP_SESSION_ACTIVE ? true : false;
             } else {
-                return session_id() === '' ? FALSE : TRUE;
+                return session_id() === '' ? false : true;
             }
         }
-        return FALSE;
-    }
 
+        return false;
+    }
 }
